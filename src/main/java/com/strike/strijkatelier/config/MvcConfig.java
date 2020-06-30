@@ -14,9 +14,9 @@ import org.springframework.web.servlet.i18n.*;
 
 import java.util.*;
 
-@Configuration
-@ComponentScan(basePackages = {"com.strike.strijkatelier.web"})
-@EnableWebMvc
+//@Configuration
+//@ComponentScan(basePackages = {"com.strike.strijkatelier.web"})
+//@EnableWebMvc
 public class MvcConfig implements WebMvcConfigurer {
 
     @Autowired

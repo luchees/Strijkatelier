@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -69,11 +70,17 @@ public class RegistrationController {
     }
 
     // Registration
+    // Example user
+    @GetMapping("/user/registration")
+    public ResponseEntity<UserDto> getExampleUserAccount(final HttpServletRequest request) {
+        //LOGGER.info("Registering user account with information: {}", accountDto);
+        return ResponseEntity.ok(new UserDto());
+    }
 
     @PostMapping("/user/registration")
     @ResponseBody
     public GenericResponse registerUserAccount(@Valid final UserDto accountDto, final HttpServletRequest request) {
-        LOGGER.debug("Registering user account with information: {}", accountDto);
+        LOGGER.info("Registering user account with information: {}", accountDto );
 
         final User registered = userService.registerNewUserAccount(accountDto);
         userService.addUserLocation(registered, getClientIP(request));

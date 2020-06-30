@@ -1,23 +1,24 @@
 package com.strike.strijkatelier.service;
 
-import com.maxmind.geoip2.*;
+import com.maxmind.geoip2.DatabaseReader;
 import com.strike.strijkatelier.persistence.dao.*;
 import com.strike.strijkatelier.persistence.model.*;
-import com.strike.strijkatelier.web.dto.*;
-import com.strike.strijkatelier.web.error.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.*;
-import org.springframework.security.core.context.*;
-import org.springframework.security.core.session.*;
-import org.springframework.security.crypto.password.*;
-import org.springframework.stereotype.*;
+import com.strike.strijkatelier.web.dto.UserDto;
+import com.strike.strijkatelier.web.error.UserAlreadyExistException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-import javax.transaction.*;
-import java.io.*;
-import java.net.*;
+import javax.transaction.Transactional;
+import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.URLEncoder;
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -60,7 +61,8 @@ public class UserService implements IUserService {
     // API
 
     @Override
-    public User registerNewUserAccount(final UserDto accountDto) {
+    public User registerNewUserAccount(UserDto accountDto) {
+        System.out.println(accountDto);
         if (emailExists(accountDto.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email adress: " + accountDto.getEmail());
         }

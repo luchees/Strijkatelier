@@ -12,6 +12,7 @@
     <artifactId>strijkatelier</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>strijkatelier</name>
+    <packaging>war</packaging>
     <description>backend for strijkatelier</description>
 
     <properties>
@@ -35,10 +36,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-rest-webmvc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.plugin</groupId>
@@ -86,10 +83,6 @@
             <artifactId>aerogear-otp-java</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
 
         <!-- Servlet -->
@@ -150,10 +143,6 @@
         </dependency>
 
         <dependency>
-            <groupId>nz.net.ultraq.thymeleaf</groupId>
-            <artifactId>thymeleaf-layout-dialect</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20090211</version>
@@ -202,10 +191,6 @@
             <groupId>com.googlecode.libphonenumber</groupId>
             <artifactId>libphonenumber</artifactId>
             <version>8.12.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>

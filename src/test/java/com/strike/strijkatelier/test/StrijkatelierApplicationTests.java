@@ -1,17 +1,19 @@
 package com.strike.strijkatelier.test;
 
-import com.strike.strijkatelier.model.*;
-import com.strike.strijkatelier.service.*;
-import org.junit.*;
-import org.junit.rules.*;
-import org.junit.runner.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.test.autoconfigure.orm.jpa.*;
-import org.springframework.data.rest.webmvc.*;
-import org.springframework.test.context.junit4.*;
+import com.strike.strijkatelier.Exceptions.ResourceNotFoundException;
+import com.strike.strijkatelier.model.Bucket;
+import com.strike.strijkatelier.model.Item;
+import com.strike.strijkatelier.service.BucketService;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.sql.*;
-import java.util.*;
+import javax.sql.DataSource;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 

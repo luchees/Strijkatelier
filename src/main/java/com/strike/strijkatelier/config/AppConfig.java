@@ -1,7 +1,8 @@
 package com.strike.strijkatelier.config;
 
-import com.strike.strijkatelier.security.*;
-import org.springframework.context.annotation.*;
+import com.strike.strijkatelier.security.ActiveUserStore;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AppConfig {
@@ -11,5 +12,4 @@ public class AppConfig {
     public ActiveUserStore activeUserStore() {
         return new ActiveUserStore();
     }
-
 }
