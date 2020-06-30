@@ -1,8 +1,8 @@
 package com.strike.strijkatelier.service;
 
-import com.strike.strijkatelier.Exceptions.BadResourceException;
-import com.strike.strijkatelier.Exceptions.ResourceAlreadyExistsException;
-import com.strike.strijkatelier.Exceptions.ResourceNotFoundException;
+import com.strike.strijkatelier.exceptions.BadResourceException;
+import com.strike.strijkatelier.exceptions.ResourceAlreadyExistsException;
+import com.strike.strijkatelier.exceptions.ResourceNotFoundException;
 import com.strike.strijkatelier.model.Bucket;
 import com.strike.strijkatelier.model.Customer;
 import com.strike.strijkatelier.repo.CustomerRepository;

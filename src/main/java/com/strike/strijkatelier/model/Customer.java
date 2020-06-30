@@ -3,7 +3,7 @@ package com.strike.strijkatelier.model;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
-import com.strike.strijkatelier.Exceptions.BadResourceException;
+import com.strike.strijkatelier.exceptions.BadResourceException;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -14,7 +14,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Entity
 @Table(name = "customer")

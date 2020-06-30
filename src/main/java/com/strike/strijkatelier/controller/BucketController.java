@@ -1,13 +1,8 @@
 package com.strike.strijkatelier.controller;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import javax.validation.Valid;
-
-import com.strike.strijkatelier.Exceptions.BadResourceException;
-import com.strike.strijkatelier.Exceptions.ResourceAlreadyExistsException;
-import com.strike.strijkatelier.Exceptions.ResourceNotFoundException;
+import com.strike.strijkatelier.exceptions.BadResourceException;
+import com.strike.strijkatelier.exceptions.ResourceAlreadyExistsException;
+import com.strike.strijkatelier.exceptions.ResourceNotFoundException;
 import com.strike.strijkatelier.model.Bucket;
 import com.strike.strijkatelier.model.Item;
 import com.strike.strijkatelier.service.BucketService;
@@ -18,16 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/buckets")

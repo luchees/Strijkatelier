@@ -1,4 +1,4 @@
-package com.strike.strijkatelier.Exceptions;
+package com.strike.strijkatelier.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;
