@@ -79,7 +79,7 @@ public class RegistrationController {
 
     @PostMapping("/user/registration")
     @ResponseBody
-    public GenericResponse registerUserAccount(@Valid final UserDto accountDto, final HttpServletRequest request) {
+    public GenericResponse registerUserAccount(@RequestBody UserDto accountDto, final HttpServletRequest request) {
         LOGGER.info("Registering user account with information: {}", accountDto );
 
         final User registered = userService.registerNewUserAccount(accountDto);
