@@ -1,12 +1,12 @@
 package com.strike.strijkatelier.repository;
 
-import com.strike.strijkatelier.domain.entity.User;
+import com.strike.strijkatelier.domain.entity.UserEntity;
 import org.springframework.data.jpa.repository.*;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    UserEntity findByEmail(String email);
 
     @Override
-    void delete(User user);
+    void delete(UserEntity user);
 
 }

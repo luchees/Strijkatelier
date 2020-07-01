@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @author Simon Cek (simon.cek@integrationworks.co.th)
  * @created 1/7/2020 AD
  */
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorInfo {
 

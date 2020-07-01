@@ -4,11 +4,9 @@ import java.util.Collection;
 
 import javax.persistence.*;
 
-import org.jboss.aerogear.security.otp.api.Base32;
-
 @Entity
 @Table(name = "user_account")
-public class User {
+public class UserEntity {
 
     @Id
     @Column(unique = true, nullable = false)
@@ -29,7 +27,7 @@ public class User {
     @OneToMany(targetEntity=Role.class,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Role> roles;
 
-    public User() {
+    public UserEntity() {
         super();
         this.enabled = true;
     }
@@ -109,7 +107,7 @@ public class User {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final User user = (User) obj;
+        final UserEntity user = (UserEntity) obj;
         if (!email.equals(user.email)) {
             return false;
         }
