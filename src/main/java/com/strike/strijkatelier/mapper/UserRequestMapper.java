@@ -22,13 +22,13 @@ public class UserRequestMapper {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserEntity mapToUserEntity(RegistrationRequest registrationRequest){
+    public UserEntity mapToUserEntity(RegistrationRequest registrationRequest, Role role){
        UserEntity userEntity = new UserEntity();
        userEntity.setFirstName(registrationRequest.getFirstName());
        userEntity.setLastName(registrationRequest.getLastName());
        userEntity.setEmail(registrationRequest.getEmail());
        userEntity.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
-       userEntity.setRoles(Collections.singletonList(new Role("BASIC_USER")));
+       userEntity.setRoles(Collections.singletonList(role));
        return userEntity;
     }
 }

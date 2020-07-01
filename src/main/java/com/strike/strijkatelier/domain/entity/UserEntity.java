@@ -9,7 +9,6 @@ import javax.persistence.*;
 public class UserEntity {
 
     @Id
-    @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -17,6 +16,7 @@ public class UserEntity {
 
     private String lastName;
 
+    @Column(unique = true)
     private String email;
 
     @Column(length = 60)
@@ -24,7 +24,13 @@ public class UserEntity {
 
     private boolean enabled;
 
-    @OneToMany(targetEntity=Role.class,cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
     public UserEntity() {
