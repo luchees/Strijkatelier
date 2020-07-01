@@ -32,6 +32,9 @@ public class RegistrationRequest {
 
     private String matchingPassword;
 
+    public RegistrationRequest() {
+    }
+
     public RegistrationRequest(String firstName, String lastName, String email, String password, String matchingPassword) {
         this.firstName = firstName;
         this.lastName = lastName;

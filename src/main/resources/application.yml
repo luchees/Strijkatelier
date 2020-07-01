@@ -1,6 +1,14 @@
 server:
   port: ${PORT:8081}
 
+security:
+  basic:
+    enabled: false
+
+management:
+  security:
+    enabled: false
+
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -11,7 +19,7 @@ spring:
     password: postgres
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
       format_sql: true
     properties:
       hibernate:

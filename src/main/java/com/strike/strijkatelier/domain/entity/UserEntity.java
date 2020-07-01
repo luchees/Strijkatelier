@@ -24,7 +24,7 @@ public class UserEntity {
 
     private boolean enabled;
 
-    @OneToMany(targetEntity=Role.class,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Role.class,cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Collection<Role> roles;
 
     public UserEntity() {
