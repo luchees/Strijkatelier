@@ -64,7 +64,7 @@ public class OldRegistrationController {
     // API
 
     @GetMapping("/user/registration")
-    public String showRegistrationForm(final HttpServletRequest request, final Model model) {
+    public String showRegistrationForm(final HttpServletRequest request, @RequestBody final Model model) {
         LOGGER.debug("Rendering registration page.");
         final UserDto accountDto = new UserDto();
         model.addAttribute("user", accountDto);
@@ -98,7 +98,7 @@ public class OldRegistrationController {
     }
 
     @PostMapping("/user/registration")
-    public ModelAndView registerUserAccount(@ModelAttribute("user") @Valid final UserDto userDto, final HttpServletRequest request, final Errors errors) {
+    public ModelAndView registerUserAccount(@RequestBody @ModelAttribute("user") @Valid final UserDto userDto, final HttpServletRequest request, @RequestBody final Errors errors) {
         LOGGER.debug("Registering user account with information: {}", userDto);
 
         try {
@@ -119,7 +119,7 @@ public class OldRegistrationController {
     }
 
     @GetMapping("/user/resendRegistrationToken")
-    public String resendRegistrationToken(final HttpServletRequest request, final Model model, @RequestParam("token") final String existingToken) {
+    public String resendRegistrationToken(final HttpServletRequest request, @RequestBody final Model model, @RequestParam("token") final String existingToken) {
         final Locale locale = request.getLocale();
         final VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
         final User user = userService.getUser(newToken.getToken());
@@ -140,7 +140,7 @@ public class OldRegistrationController {
     }
 
     @PostMapping("/user/resetPassword")
-    public String resetPassword(final HttpServletRequest request, final Model model, @RequestParam("email") final String userEmail) {
+    public String resetPassword(final HttpServletRequest request,@RequestBody final Model model, @RequestParam("email") final String userEmail) {
         final User user = userService.findUserByEmail(userEmail);
         if (user == null) {
             model.addAttribute("message", messages.getMessage("message.userNotFound", null, request.getLocale()));
@@ -166,7 +166,7 @@ public class OldRegistrationController {
     }
 
     @GetMapping("/user/changePassword")
-    public String changePassword(final HttpServletRequest request, final Model model, @RequestParam("id") final long id, @RequestParam("token") final String token) {
+    public String changePassword(final HttpServletRequest request, @RequestBody final Model model, @RequestParam("id") final long id, @RequestParam("token") final String token) {
         final Locale locale = request.getLocale();
 
         final PasswordResetToken passToken = userService.getPasswordResetToken(token);
@@ -191,7 +191,7 @@ public class OldRegistrationController {
 
     @PostMapping("/user/savePassword")
     @PreAuthorize("hasRole('READ_PRIVILEGE')")
-    public String savePassword(final HttpServletRequest request, final Model model, @RequestParam("password") final String password) {
+    public String savePassword(final HttpServletRequest request, @RequestBody final Model model, @RequestParam("password") final String password) {
         final Locale locale = request.getLocale();
 
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -202,7 +202,7 @@ public class OldRegistrationController {
 
     // NON-API
 
-    private final SimpleMailMessage constructResetVerificationTokenEmail(final String contextPath, final Locale locale, final VerificationToken newToken, final User user) {
+    private final SimpleMailMessage constructResetVerificationTokenEmail(@RequestBody final String contextPath, @RequestBody final Locale locale, @RequestBody final VerificationToken newToken, @RequestBody final User user) {
         final String confirmationUrl = contextPath + "/old/registrationConfirm.html?token=" + newToken.getToken();
         final String message = messages.getMessage("message.resendToken", null, locale);
         final SimpleMailMessage email = new SimpleMailMessage();
@@ -213,7 +213,7 @@ public class OldRegistrationController {
         return email;
     }
 
-    private final SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {
+    private final SimpleMailMessage constructResetTokenEmail(@RequestBody final String contextPath, @RequestBody final Locale locale, @RequestBody final String token, @RequestBody final User user) {
         final String url = contextPath + "/old/user/changePassword?id=" + user.getId() + "&token=" + token;
         final String message = messages.getMessage("message.resetPassword", null, locale);
         final SimpleMailMessage email = new SimpleMailMessage();

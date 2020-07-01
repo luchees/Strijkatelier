@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +42,7 @@ public class RegistrationCaptchaController {
 
     // Registration
     @PostMapping("/user/registrationCaptcha")
-    public GenericResponse captchaRegisterUserAccount(@Valid final UserDto accountDto, final HttpServletRequest request) {
+    public GenericResponse captchaRegisterUserAccount(@RequestBody  @Valid final UserDto accountDto, final HttpServletRequest request) {
 
         final String response = request.getParameter("g-recaptcha-response");
         captchaService.processResponse(response);
@@ -53,15 +54,14 @@ public class RegistrationCaptchaController {
     // Registration reCaptchaV3
     @PostMapping("/user/registrationCaptchaV3")
     @ResponseBody
-    public GenericResponse captchaV3RegisterUserAccount(@Valid final UserDto accountDto, final HttpServletRequest request) {
+    public GenericResponse captchaV3RegisterUserAccount(@RequestBody @Valid final UserDto accountDto, @RequestBody final String captcha, final HttpServletRequest request) {
 
-        final String response = request.getParameter("response");
-        captchaServiceV3.processResponse(response, CaptchaServiceV3.REGISTER_ACTION);
+        captchaServiceV3.processResponse(captcha, CaptchaServiceV3.REGISTER_ACTION);
 
         return registerNewUserHandler(accountDto, request);
     }
 
-    private GenericResponse registerNewUserHandler(final UserDto accountDto, final HttpServletRequest request) {
+    private GenericResponse registerNewUserHandler(@RequestBody final UserDto accountDto, final HttpServletRequest request) {
         LOGGER.debug("Registering user account with information: {}", accountDto);
 
         final User registered = userService.registerNewUserAccount(accountDto);

@@ -1,6 +1,7 @@
 package com.strike.strijkatelier.service;
 
 import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.strike.strijkatelier.persistence.dao.*;
 import com.strike.strijkatelier.persistence.model.*;
 import com.strike.strijkatelier.web.dto.UserDto;
@@ -14,9 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -259,17 +262,24 @@ public class UserService implements IUserService {
 
     @Override
     public void addUserLocation(User user, String ip) {
+
+        String country = "Local";
         try {
             final InetAddress ipAddress = InetAddress.getByName(ip);
-            final String country = databaseReader.country(ipAddress)
+            country = databaseReader.country(ipAddress)
                 .getCountry()
                 .getName();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (GeoIp2Exception e) {
+            e.printStackTrace();
+        }
             UserLocation loc = new UserLocation(country, user);
             loc.setEnabled(true);
             loc = userLocationRepository.save(loc);
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     private NewLocationToken createNewLocationToken(String country, User user) {

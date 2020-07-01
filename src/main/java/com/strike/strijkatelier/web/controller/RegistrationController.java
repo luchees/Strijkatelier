@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -70,13 +69,6 @@ public class RegistrationController {
     }
 
     // Registration
-    // Example user
-    @GetMapping("/user/registration")
-    public ResponseEntity<UserDto> getExampleUserAccount(final HttpServletRequest request) {
-        //LOGGER.info("Registering user account with information: {}", accountDto);
-        return ResponseEntity.ok(new UserDto());
-    }
-
     @PostMapping("/user/registration")
     @ResponseBody
     public GenericResponse registerUserAccount(@RequestBody UserDto accountDto, final HttpServletRequest request) {
@@ -89,7 +81,7 @@ public class RegistrationController {
     }
 
     @GetMapping("/registrationConfirm")
-    public String confirmRegistration(final HttpServletRequest request, final Model model, @RequestParam("token") final String token) throws UnsupportedEncodingException {
+    public String confirmRegistration(final HttpServletRequest request,@RequestBody final Model model, @RequestParam("token") final String token) throws UnsupportedEncodingException {
         Locale locale = request.getLocale();
         final String result = userService.validateVerificationToken(token);
         if (result.equals("valid")) {
@@ -152,7 +144,7 @@ public class RegistrationController {
 
     @PostMapping("/user/savePassword")
     @ResponseBody
-    public GenericResponse savePassword(final Locale locale, @Valid PasswordDto passwordDto) {
+    public GenericResponse savePassword(@RequestBody final Locale locale, @RequestBody @Valid PasswordDto passwordDto) {
 
         final String result = securityUserService.validatePasswordResetToken(passwordDto.getToken());
 
@@ -172,7 +164,7 @@ public class RegistrationController {
     // change user password
     @PostMapping("/user/updatePassword")
     @ResponseBody
-    public GenericResponse changeUserPassword(final Locale locale, @Valid PasswordDto passwordDto) {
+    public GenericResponse changeUserPassword(@RequestBody final Locale locale, @RequestBody @Valid PasswordDto passwordDto) {
         final User user = userService.findUserByEmail(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
         if (!userService.checkIfValidOldPassword(user, passwordDto.getOldPassword())) {
             throw new InvalidOldPasswordException();

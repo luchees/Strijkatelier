@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Locale;
 
@@ -19,13 +20,13 @@ public class UserController {
     IUserService userService;
 
     @GetMapping("/loggedUsers")
-    public String getLoggedUsers(final Locale locale, final Model model) {
+    public String getLoggedUsers(@RequestBody final Locale locale, @RequestBody final Model model) {
         model.addAttribute("users", activeUserStore.getUsers());
         return "users";
     }
 
     @GetMapping("/loggedUsersFromSessionRegistry")
-    public String getLoggedUsersFromSessionRegistry(final Locale locale, final Model model) {
+    public String getLoggedUsersFromSessionRegistry(@RequestBody final Locale locale, @RequestBody final Model model) {
         model.addAttribute("users", userService.getUsersFromSessionRegistry());
         return "users";
     }
