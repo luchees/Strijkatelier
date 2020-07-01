@@ -16,14 +16,13 @@ public class ResourceNotFoundException extends GenericRuntimeException{
 
     private ErrorList errorList;
 
-    public ResourceNotFoundException(String code, String message, String description, String moreInfo) {
+    public ResourceNotFoundException(String message, String description, String moreInfo) {
         super("Input Validation Exception with" +
-                " code \"" + code + "\"" +
                 " message \"" + message + "\"" +
                 " description\"" + description + "\"" +
                 " moreInfo \"" + moreInfo + "\"");
         ArrayList<ErrorInfo> inputErrorList = new ArrayList<ErrorInfo>();
-        inputErrorList.add(new ErrorInfo(code, message, description, moreInfo));
+        inputErrorList.add(new ErrorInfo(message, description, moreInfo));
         errorList = new ErrorList(inputErrorList);
     }
 

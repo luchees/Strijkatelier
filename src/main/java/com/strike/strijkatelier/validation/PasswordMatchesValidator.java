@@ -1,5 +1,7 @@
 package com.strike.strijkatelier.validation;
 
+import com.strike.strijkatelier.domain.model.RegistrationRequest;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -12,9 +14,8 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
 
     @Override
     public boolean isValid(final Object obj, final ConstraintValidatorContext context) {
-//        final UserDto user = (UserDto) obj;
-//        return user.getPassword().equals(user.getMatchingPassword());
-        return true;
+        final RegistrationRequest request  = (RegistrationRequest) obj;
+        return request.getPassword().equals(request.getMatchingPassword());
     }
 
 }

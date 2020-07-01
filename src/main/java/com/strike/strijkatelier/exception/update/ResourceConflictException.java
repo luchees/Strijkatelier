@@ -16,14 +16,13 @@ public class ResourceConflictException extends GenericRuntimeException {
 
     private ErrorList errorList;
 
-    public ResourceConflictException(String code, String message, String description, String moreInfo) {
+    public ResourceConflictException(String message, String description, String moreInfo) {
         super("Resource Conflict Exception with" +
-                " code \""+code +"\"" +
                 " message \""+message+"\"" +
                 " description\""+description+"\"" +
                 " moreInfo \""+moreInfo+"\"");
         ArrayList<ErrorInfo> inputErrorList = new ArrayList<ErrorInfo>();
-        inputErrorList.add(new ErrorInfo(code,message,description,moreInfo));
+        inputErrorList.add(new ErrorInfo(message,description,moreInfo));
         errorList = new ErrorList(inputErrorList);
 
     }

@@ -17,14 +17,13 @@ public class InputValidationException extends GenericRuntimeException {
 
     private final ErrorList errorList;
 
-    public InputValidationException(String code, String message, String description, String moreInfo) {
+    public InputValidationException(String message, String description, String moreInfo) {
         super("Input Validation Exception with" +
-                " code \"" + code + "\"" +
                 " message \"" + message + "\"" +
                 " description\"" + description + "\"" +
                 " moreInfo \"" + moreInfo + "\"");
         ArrayList<ErrorInfo> inputErrorList = new ArrayList<ErrorInfo>();
-        inputErrorList.add(new ErrorInfo(code, message, description, moreInfo));
+        inputErrorList.add(new ErrorInfo(message, description, moreInfo));
         errorList = new ErrorList(inputErrorList);
     }
 

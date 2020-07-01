@@ -48,7 +48,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Strijkaterlier API")
-                .contact(new Contact("Lucas Vanden abbeele", "", ""))
+                .contact(new Contact("Lucas Van den Abbeele", "", ""))
                 .description("")
                 .version("1.0")
                 .build();

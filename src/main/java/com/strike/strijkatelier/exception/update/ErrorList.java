@@ -1,6 +1,8 @@
 package com.strike.strijkatelier.exception.update;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
@@ -10,6 +12,8 @@ import java.util.List;
  *
  *
  */
+
+@ApiModel(value = "Errors", description = "List of Errors that occurred")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorList {
 
@@ -22,6 +26,7 @@ public class ErrorList {
         this.errors = errors;
     }
 
+    @ApiModelProperty(position = 1, required = true, dataType = "List<ErrorInfo>", notes = "List of ErrorInfo")
     public List<ErrorInfo> getErrors() {
         return errors;
     }
