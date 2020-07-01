@@ -3,7 +3,7 @@ package com.strike.strijkatelier.controller;
 import com.strike.strijkatelier.exception.BadResourceException;
 import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
-import com.strike.strijkatelier.model.Item;
+import com.strike.strijkatelier.domain.entity.Item;
 import com.strike.strijkatelier.service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

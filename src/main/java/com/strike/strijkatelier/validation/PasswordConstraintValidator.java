@@ -6,9 +6,6 @@ import org.passay.*;
 import javax.validation.*;
 import java.util.*;
 
-;
-
-
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
     @Override
