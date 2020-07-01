@@ -1,6 +1,6 @@
 package com.strike.strijkatelier.test;
 
-import com.strike.strijkatelier.exceptions.ResourceNotFoundException;
+import com.strike.strijkatelier.exception.ResourceNotFoundException;
 import com.strike.strijkatelier.model.Bucket;
 import com.strike.strijkatelier.model.Item;
 import com.strike.strijkatelier.service.BucketService;

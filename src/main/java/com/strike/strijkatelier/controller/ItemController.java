@@ -1,8 +1,8 @@
 package com.strike.strijkatelier.controller;
 
-import com.strike.strijkatelier.exceptions.BadResourceException;
-import com.strike.strijkatelier.exceptions.ResourceAlreadyExistsException;
-import com.strike.strijkatelier.exceptions.ResourceNotFoundException;
+import com.strike.strijkatelier.exception.BadResourceException;
+import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
+import com.strike.strijkatelier.exception.ResourceNotFoundException;
 import com.strike.strijkatelier.model.Item;
 import com.strike.strijkatelier.service.ItemService;
 import org.slf4j.Logger;

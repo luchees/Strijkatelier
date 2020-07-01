@@ -1,4 +1,4 @@
-package com.strike.strijkatelier.exceptions;
+package com.strike.strijkatelier.exception;
 
 public class ResourceNotFoundException extends Exception {
 

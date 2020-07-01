@@ -1,8 +1,8 @@
 package com.strike.strijkatelier.service;
 
-import com.strike.strijkatelier.exceptions.BadResourceException;
-import com.strike.strijkatelier.exceptions.ResourceAlreadyExistsException;
-import com.strike.strijkatelier.exceptions.ResourceNotFoundException;
+import com.strike.strijkatelier.exception.BadResourceException;
+import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
+import com.strike.strijkatelier.exception.ResourceNotFoundException;
 import com.strike.strijkatelier.model.Item;
 import com.strike.strijkatelier.repo.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;

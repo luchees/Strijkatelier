@@ -3,7 +3,7 @@ package com.strike.strijkatelier.model;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
-import com.strike.strijkatelier.exceptions.BadResourceException;
+import com.strike.strijkatelier.exception.BadResourceException;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.validator.routines.EmailValidator;
