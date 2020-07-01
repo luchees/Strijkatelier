@@ -1,6 +1,5 @@
 package com.strike.strijkatelier.config;
 
-import com.fasterxml.classmate.TypeResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +12,6 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
-import java.time.LocalDateTime;
-
 /**
  * Configuration for the Swagger-UI
  */
@@ -22,11 +19,9 @@ import java.time.LocalDateTime;
 @Configuration
 public class SwaggerConfig {
 
-    private final TypeResolver typeResolver;
     private final boolean swaggerEnabled;
 
     public SwaggerConfig(@Value("${framework.swagger.enabled:true}") boolean swaggerEnabled) {
-        this.typeResolver = new TypeResolver();
         this.swaggerEnabled = swaggerEnabled;
     }
 
@@ -37,13 +32,9 @@ public class SwaggerConfig {
                 .groupName("Strijkatelier API")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage( "com.strike.strijkatelier.controller" ))
+                .apis(RequestHandlerSelectors.basePackage("com.strike.strijkatelier.controller"))
                 .paths(PathSelectors.any())
                 .build()
-                .forCodeGeneration(true)
-                .ignoredParameterTypes()
-                .directModelSubstitute(LocalDateTime.class, String.class)
-                .alternateTypeRules()
                 .enable(swaggerEnabled);
         return thisDocket;
     }
