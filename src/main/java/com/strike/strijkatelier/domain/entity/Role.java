@@ -1,12 +1,9 @@
 package com.strike.strijkatelier.domain.entity;
 
-import java.util.Collection;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 @Entity
 public class Role {
@@ -16,10 +13,6 @@ public class Role {
     private Long id;
 
     private String name;
-
-    @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
-
 
     public Role() {}
 
@@ -43,13 +36,6 @@ public class Role {
         this.name = name;
     }
 
-    public Collection<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(final Collection<User> users) {
-        this.users = users;
-    }
 
     @Override
     public int hashCode() {

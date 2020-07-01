@@ -2,16 +2,7 @@ package com.strike.strijkatelier.domain.entity;
 
 import java.util.Collection;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.jboss.aerogear.security.otp.api.Base32;
 
@@ -35,9 +26,7 @@ public class User {
 
     private boolean enabled;
 
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @OneToMany(targetEntity=Role.class,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Role> roles;
 
     public User() {
