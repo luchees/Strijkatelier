@@ -1,28 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import './AlertComponent.css';
+import React, {useEffect, useState} from 'react';
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const style = {
+    alertMessage: {
+        minWidth: "200px",
+        justifyContent: "space-between"
+    }
+}
+
 function AlertComponent(props) {
     const [modalDisplay, toggleDisplay] = useState('none');
     const openModal = () => {
-        toggleDisplay('block');     
+        toggleDisplay('block');
     }
     const closeModal = () => {
-        toggleDisplay('none'); 
+        toggleDisplay('none');
         props.hideError(null);
     }
     useEffect(() => {
-        if(props.errorMessage !== null) {
+        if (props.errorMessage !== null) {
             openModal()
         } else {
             closeModal()
         }
     });
-    
-    return(
-        <div 
-            className={"alert alert-danger alert-dismissable mt-4"} 
-            role="alert" 
+
+    return (
+        <div
+            className={"alert alert-danger alert-dismissable mt-4"}
+            role="alert"
             id="alertPopUp"
-            style={{ display: modalDisplay }}
+            style={{display: modalDisplay}}
         >
             <div className="d-flex alertMessage">
                 <span>{props.errorMessage}</span>
@@ -30,9 +38,9 @@ function AlertComponent(props) {
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            
+
         </div>
     )
-} 
+}
 
-export default AlertComponent
+export default withStyles(style)(AlertComponent)

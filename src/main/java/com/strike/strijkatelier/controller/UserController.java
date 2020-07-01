@@ -8,10 +8,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -19,7 +17,7 @@ import javax.validation.Valid;
  * @author Simon Cek (simon.cek@integrationworks.co.th)
  * @created 1/7/2020 AD
  */
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api")
 @Api(value = "user-management", description = "User Management API",tags = "user-management")
@@ -35,8 +33,14 @@ public class UserController {
             @ApiResponse(code = 500, message = "Internal server error")
     })
     @PostMapping(value = "/users/register", consumes = {"application/json"}, produces = {"application/json"})
-    public void registerUser(@Valid @RequestBody RegistrationRequest request) {
-        userService.registerUser(request);
+    public ResponseEntity registerUser(@Valid @RequestBody RegistrationRequest request) {
+        try {
+            userService.registerUser(request);
+        }
+        catch ( Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
     }
 
 }

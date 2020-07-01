@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 function Header(props) {
     const capitalize = (s) => {
@@ -9,7 +9,16 @@ function Header(props) {
     const title = capitalize(props.location.pathname.substring(1,props.location.pathname.length))
     return(
         <nav className="navbar navbar-dark bg-primary">
-            <div className="row col-12 d-flex justify-content-center text-white">
+            <div className="row col-12 d-flex text-white">
+                    <Link to="/" className="brand-logo">Strijkatelier</Link>
+
+                    {/*<ul className="right">*/}
+                    {/*    <li><Link to="/login">Login</Link></li>*/}
+                    {/*    <li><Link to="/register">Register</Link></li>*/}
+                    {/*    <li><Link to="/home">Home</Link></li>*/}
+                    {/*</ul>*/}
+
+
                 <span className="h3">{props.title || title}</span>
             </div>
         </nav>

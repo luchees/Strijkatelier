@@ -25,12 +25,14 @@ public class UserService {
         this.mapper = mapper;
     }
 
-    public void registerUser(RegistrationRequest request){
+    public void registerUser(RegistrationRequest request) throws Exception {
         Role role = roleRepository.findByName("BASIC_USER");
-        try{
+        try {
             userRepository.save(mapper.mapToUserEntity(request, role));
-        }catch(Exception ex) {
-            System.out.println(ex);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e);
         }
     }
 
