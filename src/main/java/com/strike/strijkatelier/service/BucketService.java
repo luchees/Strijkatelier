@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -79,6 +80,16 @@ public class BucketService {
         } else {
             bucketRepository.deleteById(id);
         }
+    }
+
+    public List<Bucket> getActiveBuckets() {
+        List<Bucket> buckets = bucketRepository.getBucketsByActive(true);
+        return buckets;
+    }
+
+    public List<Bucket> getActiveBucketsByDate(Date startDate) {
+        List<Bucket> buckets = bucketRepository.getBucketsByActiveAndStartDateTime(true,startDate);
+        return buckets;
     }
 
     public Long count() {

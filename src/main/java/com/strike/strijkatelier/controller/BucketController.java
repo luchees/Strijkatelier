@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -31,6 +32,17 @@ public class BucketController {
     @Autowired
     private  BucketService bucketService;
 
+    @GetMapping(value = "/active", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Bucket>> getActiveBuckets() {
+        List<Bucket> buckets = bucketService.getActiveBuckets();
+        return ResponseEntity.ok(buckets);
+    }
+
+    @GetMapping(value = "/active{startDate}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Bucket>> getActiveBucketsByDate(@PathVariable Date startDate) {
+        List<Bucket> buckets = bucketService.getActiveBucketsByDate(startDate);
+        return ResponseEntity.ok(buckets);
+    }
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Bucket>> findAll(
