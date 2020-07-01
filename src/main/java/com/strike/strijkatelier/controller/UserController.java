@@ -22,7 +22,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
-@Api(value = "user-management", description = "User Management API")
+@Api(value = "user-management", description = "User Management API",tags = "user-management")
 public class UserController {
 
     @Autowired
