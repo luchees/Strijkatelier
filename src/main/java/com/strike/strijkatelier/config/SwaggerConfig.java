@@ -12,6 +12,8 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.time.LocalDateTime;
+
 /**
  * Configuration for the Swagger-UI
  */
@@ -32,9 +34,13 @@ public class SwaggerConfig {
                 .groupName("Strijkatelier API")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.strike.strijkatelier.controller"))
+                .apis(RequestHandlerSelectors.basePackage( "com.strike.strijkatelier.controller" ))
                 .paths(PathSelectors.any())
                 .build()
+                .pathMapping("/")
+                .ignoredParameterTypes()
+                .directModelSubstitute(LocalDateTime.class, String.class)
+                .alternateTypeRules()
                 .enable(swaggerEnabled);
         return thisDocket;
     }
