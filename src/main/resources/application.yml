@@ -21,15 +21,15 @@ spring:
     host:
     port: 465
     protocol: smtps
-    username: USERNAME@gmail.com
-    password: PASSWORD
+    username: admin@strijkatelier.be
+    password: password
     properties:
       mail:
         smtp:
           timeout: 8000
           auth: true
           starttls:
-            enable: true
+            enable: false
       protocol: smtp
       test-connection: false
 
