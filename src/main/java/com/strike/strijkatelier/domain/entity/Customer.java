@@ -63,15 +63,15 @@ public class Customer {
             throw new BadResourceException("emailAddress is not valid syntax");
         }
     }
-    public void setPhoneNumber(String phoneNumber) throws BadResourceException {
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-        try {
-            Phonenumber.PhoneNumber phoneNumber1 = phoneNumberUtil.parse(phoneNumber, "BE");
-            this.phoneNumber=phoneNumber;
-        } catch (NumberParseException e) {
-            throw new BadResourceException("phonenumber is not valid syntax"  );
-        }
-
-    }
+//    public void setPhoneNumber(String phoneNumber) throws BadResourceException {
+//        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+//        try {
+//            Phonenumber.PhoneNumber phoneNumber1 = phoneNumberUtil.parse(phoneNumber, "BE");
+//            this.phoneNumber=phoneNumber;
+//        } catch (NumberParseException e) {
+//            throw new BadResourceException("phonenumber is not valid syntax"  );
+//        }
+//
+//    }
 
 }

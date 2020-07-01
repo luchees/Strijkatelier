@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import Admin from "./components/Admin";
 import {AuthContext} from "./context/auth";
 import PrivateRoute from './components/PrivateRoute';
+import ChangePassword from "./components/ChangePassword";
 
 function App() {
     const [title, updateTitle] = useState(null);
@@ -17,7 +18,7 @@ function App() {
 
     const [errorMessage, updateErrorMessage] = useState(null);
     return (
-        <AuthContext.Provider value={false}>
+        <AuthContext.Provider value={true}>
             <Router>
                 <div className="App">
                     <Header title={title}/>
@@ -37,6 +38,7 @@ function App() {
                             <Home/>
                         </Route>
                         <PrivateRoute path="/admin" component={Admin}/>
+                        <PrivateRoute path="/account/change-password" component={ChangePassword}/>
 
                         <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
                     </div>
