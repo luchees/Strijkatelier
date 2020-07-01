@@ -2,9 +2,12 @@ package com.strike.strijkatelier.controller;
 
 import com.strike.strijkatelier.domain.model.RegistrationRequest;
 import com.strike.strijkatelier.exception.update.ErrorList;
+import com.strike.strijkatelier.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +22,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
+@Api(value = "user-management", description = "User Management API")
 public class UserController {
+
+    @Autowired
+    private UserService userService;
 
     @ApiOperation(value = "Register a User", nickname = "registerUser", notes = "Register a new system user")
     @ApiResponses(value = {
@@ -29,7 +36,7 @@ public class UserController {
     })
     @PostMapping(value = "/users/register", consumes = {"application/json"}, produces = {"application/json"})
     public void registerUser(@Valid @RequestBody RegistrationRequest request) {
-
+        userService.registerUser(request);
     }
 
 }
