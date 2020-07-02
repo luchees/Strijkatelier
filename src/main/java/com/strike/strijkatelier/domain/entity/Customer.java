@@ -2,10 +2,6 @@ package com.strike.strijkatelier.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.strike.strijkatelier.exception.BadResourceException;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -18,16 +14,15 @@ import java.util.List;
 @Entity
 @Table(name = "customer")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-@Getter
-@Setter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Customer implements Serializable {
     private static final long serialVersionUID = 4048798961366546485L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
+
+    @Column(unique = true)
     private String emailaddress;
     @NotBlank
     private String firstName;
@@ -46,8 +41,8 @@ public class Customer implements Serializable {
     }
 
 
-    public Customer(String emailaddress, String firstName, String lastName, String phoneNumber) throws BadResourceException {
-        setEmailAddress(emailaddress);
+    public Customer(String emailaddress, String firstName, String lastName, String phoneNumber) {
+        setEmailaddress(emailaddress);
         setPhoneNumber(phoneNumber);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -59,24 +54,71 @@ public class Customer implements Serializable {
         baskets.add(basket);
     }
 
-
-    public void setEmailAddress(String emailaddress) throws BadResourceException {
-        if (!EmailValidator.getInstance(true).isValid(emailaddress)){
-            this.emailaddress=emailaddress;
-        }
-        else {
-            throw new BadResourceException("emailAddress is not valid syntax");
-        }
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
-//    public void setPhoneNumber(String phoneNumber) throws BadResourceException {
-//        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-//        try {
-//            Phonenumber.PhoneNumber phoneNumber1 = phoneNumberUtil.parse(phoneNumber, "BE");
-//            this.phoneNumber=phoneNumber;
-//        } catch (NumberParseException e) {
-//            throw new BadResourceException("phonenumber is not valid syntax"  );
-//        }
-//
-//    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmailaddress() {
+        return emailaddress;
+    }
+
+    public void setEmailaddress(String emailaddress) {
+        this.emailaddress = emailaddress;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public List<Basket> getBaskets() {
+        return baskets;
+    }
+
+    public void setBaskets(List<Basket> baskets) {
+        this.baskets = baskets;
+    }
+
+    public double getMinutesLeft() {
+        return minutesLeft;
+    }
+
+    public void setMinutesLeft(double minutesLeft) {
+        this.minutesLeft = minutesLeft;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 }

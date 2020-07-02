@@ -5,7 +5,7 @@ import com.strike.strijkatelier.domain.model.ItemDto;
 import com.strike.strijkatelier.exception.BadResourceException;
 import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
-import com.strike.strijkatelier.mapper.ItemRequestMapper;
+import com.strike.strijkatelier.mapper.ItemDtoMapper;
 import com.strike.strijkatelier.repository.ItemRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -18,9 +18,9 @@ public class ItemService {
 
     private ItemRepository itemRepository;
 
-    private ItemRequestMapper mapper;
+    private ItemDtoMapper mapper;
 
-    public ItemService(ItemRepository itemRepository, ItemRequestMapper mapper) {
+    public ItemService(ItemRepository itemRepository, ItemDtoMapper mapper) {
         this.itemRepository = itemRepository;
         this.mapper = mapper;
     }

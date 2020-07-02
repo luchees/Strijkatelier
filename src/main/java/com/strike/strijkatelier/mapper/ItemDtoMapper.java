@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class ItemRequestMapper {
+public class ItemDtoMapper {
 
-    public ItemRequestMapper() {
+    public ItemDtoMapper() {
     }
 
     public Item mapToItem(ItemDto itemDto) {
