@@ -5,7 +5,7 @@ INSERT INTO item (id, item_name, minutes, price) VALUES (1, 'Hemd', 12, 6);
 INSERT INTO item (id, item_name, minutes, price) VALUES (2, 'T-shirt', 8, 3);
 INSERT INTO item (id, item_name, minutes, price) VALUES (3, 'Broek', 10, 3);
 INSERT INTO item (id, item_name, minutes, price) VALUES (4, 'Zakdoek', 5, 2);
-INSERT INTO item (id, item_name, minutes, price) VALUES (5, 'Hemd', 12, 6);
+INSERT INTO item (id, item_name, minutes, price) VALUES (5, 'Hemd', 20, 10);
 
 /*
 Roles init

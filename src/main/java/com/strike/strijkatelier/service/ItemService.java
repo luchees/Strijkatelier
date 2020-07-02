@@ -1,11 +1,12 @@
 package com.strike.strijkatelier.service;
 
+import com.strike.strijkatelier.domain.entity.Item;
+import com.strike.strijkatelier.domain.model.ItemDto;
 import com.strike.strijkatelier.exception.BadResourceException;
 import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
-import com.strike.strijkatelier.domain.entity.Item;
+import com.strike.strijkatelier.mapper.ItemRequestMapper;
 import com.strike.strijkatelier.repository.ItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -15,9 +16,14 @@ import java.util.List;
 @Service
 public class ItemService {
 
-    @Autowired
     private ItemRepository itemRepository;
 
+    private ItemRequestMapper mapper;
+
+    public ItemService(ItemRepository itemRepository, ItemRequestMapper mapper) {
+        this.itemRepository = itemRepository;
+        this.mapper = mapper;
+    }
 
     private boolean existsById(Long id) {
         return itemRepository.existsById(id);
@@ -30,20 +36,26 @@ public class ItemService {
         } else return item;
     }
 
-    public List<Item> findAll() {
-        List<Item> items = new ArrayList<>();
-        itemRepository.findAll().forEach(items::add);
-        return items;
+    public List<ItemDto> findAll() {
+        List<ItemDto> itemDtos = new ArrayList<>();
+        itemRepository.findAll().forEach( item ->
+                itemDtos.add(mapper.maptoItemDto(item))
+        );
+        return itemDtos;
     }
 
 
-    public Item save(Item item) throws BadResourceException, ResourceAlreadyExistsException {
-        if (!StringUtils.isEmpty(item.getId())) {
-            if (item.getId() != null && existsById(item.getId())) {
-                throw new ResourceAlreadyExistsException("Item with id: " + item.getId() +
-                        " already exists");
+    public Item save(ItemDto itemDto) throws BadResourceException, ResourceAlreadyExistsException {
+        if (!StringUtils.isEmpty(itemDto.getItemName())) {
+            try {
+                Item item = itemRepository.save(mapper.mapToItem(itemDto));
+                return itemRepository.save(item);
             }
-            return itemRepository.save(item);
+            catch (Exception e)
+            {
+                throw new ResourceAlreadyExistsException();
+            }
+
         } else {
             BadResourceException exc = new BadResourceException("Failed to save item");
             exc.addErrorMessage("Item is null or empty");
@@ -51,12 +63,13 @@ public class ItemService {
         }
     }
 
-    public void update(Item item)
+    public void update(ItemDto itemDto)
             throws BadResourceException, ResourceNotFoundException {
-        if (!StringUtils.isEmpty(item.getId())) {
-            if (!existsById(item.getId())) {
-                throw new ResourceNotFoundException("Cannot find Item with id: " + item.getId());
+        if (!StringUtils.isEmpty(itemDto.getId())) {
+            if (!existsById(itemDto.getId())) {
+                throw new ResourceNotFoundException("Cannot find Item with id: " + itemDto.getId());
             }
+            Item item = itemRepository.save(mapper.mapToItem(itemDto));
             itemRepository.save(item);
         } else {
             BadResourceException exc = new BadResourceException("Failed to save item");
@@ -89,6 +102,18 @@ public class ItemService {
 
     public Long count() {
         return itemRepository.count();
+    }
+
+    public List<ItemDto> findByName(String itemName) throws ResourceNotFoundException{
+
+            List<ItemDto> itemDtos = new ArrayList<>();
+            itemRepository.findByItemName(itemName).forEach(item ->
+                    itemDtos.add(mapper.maptoItemDto(item))
+            );
+            if (itemDtos.isEmpty()){
+                throw new ResourceNotFoundException();
+            }
+            return itemDtos;
     }
 }
 

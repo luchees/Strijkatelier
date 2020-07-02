@@ -1,5 +1,7 @@
 package com.strike.strijkatelier.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
@@ -13,19 +15,12 @@ import java.util.List;
 @Entity
 @Table(name = "item")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Getter
 @Setter
 public class Item {
 
     @Id
-    @GeneratedValue(
-            strategy= GenerationType.AUTO,
-            generator="native"
-    )
-    @GenericGenerator(
-            name = "native",
-            strategy = "native"
-    )
     private Long id;
     @NotBlank
     public String itemName;
@@ -33,7 +28,7 @@ public class Item {
     public double price;
 
     public int minutes;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn (name="basket_id")
     private List<Basket> baskets;
 

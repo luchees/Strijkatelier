@@ -1,17 +1,22 @@
 package com.strike.strijkatelier.controller;
 
+import com.strike.strijkatelier.domain.entity.Item;
+import com.strike.strijkatelier.domain.model.ItemDto;
 import com.strike.strijkatelier.exception.BadResourceException;
 import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
-import com.strike.strijkatelier.domain.entity.Item;
+import com.strike.strijkatelier.exception.update.ErrorList;
 import com.strike.strijkatelier.service.ItemService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@Api(value = "item-management", description = "Item Management API", tags = "item-management")
 public class ItemController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -28,21 +34,26 @@ public class ItemController {
     private final int ROW_PER_PAGE = 5;
 
     @Autowired
-    private  ItemService itemService;
+    private ItemService itemService;
 
-
+    @ApiOperation(value = "get all items", nickname = "getAllItems", notes = "Gets all items from database")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "{getAllItems}"),
+            @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     @GetMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Item>> findAll(
-            @RequestParam(value="page", defaultValue="1") int pageNumber,
-            @RequestParam(required=false) Long id) {
-        if (StringUtils.isEmpty(id)) {
+    public ResponseEntity<List<ItemDto>> getAllItems(
+            @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
             return ResponseEntity.ok(itemService.findAll());
-        }
-        else {
-            return ResponseEntity.ok(itemService.findAll());
-        }
     }
 
+    @ApiOperation(value = "get item by id", nickname = "getItemById", notes = "Gets item from database by id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "{item}"),
+            @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     @GetMapping(value = "/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Item> findItemById(@PathVariable long itemId) {
         try {
@@ -53,27 +64,51 @@ public class ItemController {
         }
     }
 
+    @ApiOperation(value = "get item by name", nickname = "getAllItemsByName", notes = "Gets item from database by name")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "{item}"),
+            @ApiResponse(code = 404, message = "no item found with name {itemName}"),
+            @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @GetMapping(value = "/item", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ItemDto>> getAllItemsByName(@RequestParam String itemName) {
+        try{
+            List<ItemDto> item = itemService.findByName(itemName);
+            return ResponseEntity.ok(item);
+        }
+        catch (ResourceNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+
+    }
+
+    @ApiOperation(value = "add item", nickname = "getItemByName", notes = "add item to database")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "{item}"),
+            @ApiResponse(code = 409, message = "Resource Already exists"),
+            @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     @PostMapping(value = "/items")
-    public ResponseEntity<Item> addItem(@Valid @RequestBody Item item)
+    public ResponseEntity<ItemDto> addItem(@Valid @RequestBody ItemDto item)
             throws URISyntaxException {
         try {
             Item newItem = itemService.save(item);
-            return ResponseEntity.created(new URI("/api/items/" + newItem.getId()))
-                    .body(item);
+            return ResponseEntity.created(new URI("/api/items/" + newItem.getId())).body(item);
         } catch (ResourceAlreadyExistsException ex) {
-            // log exception first, then return Conflict (409)
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } catch (BadResourceException ex) {
-            // log exception first, then return Bad Request (400)
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
     @PutMapping(value = "/items/{itemId}")
-    public ResponseEntity<Item> updateItem(@Valid @RequestBody Item item,
-                                                 @PathVariable long itemId) {
+    public ResponseEntity<ItemDto> updateItem(@Valid @RequestBody ItemDto item,
+                                           @PathVariable long itemId) {
         try {
             item.setId(itemId);
             itemService.update(item);
@@ -89,20 +124,9 @@ public class ItemController {
         }
     }
 
-    @PatchMapping("/item/update")
-    public ResponseEntity<Void> updateItem(@Valid @RequestBody Item item) {
-        try {
-            itemService.update(item);
-            return ResponseEntity.ok().build();
-        } catch (ResourceNotFoundException | BadResourceException ex) {
-            // log exception first, then return Not Found (404)
-            logger.error(ex.getMessage());
-            return ResponseEntity.notFound().build();
-        }
-    }
 
     @PatchMapping("/item/{itemId}/price")
-    public ResponseEntity<Void> updatePrice(@Valid @RequestBody double price, @PathVariable long itemId) {
+    public ResponseEntity updatePrice(@Valid @RequestBody double price, @PathVariable long itemId) {
         try {
             itemService.updatePrice(itemId, price);
             return ResponseEntity.ok().build();
@@ -112,8 +136,9 @@ public class ItemController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @PatchMapping("/item/{itemId}/minutes")
-    public ResponseEntity<Void> updateMinutes(@Valid @RequestBody int minutes, @PathVariable long itemId) {
+    public ResponseEntity updateMinutes(@Valid @RequestBody int minutes, @PathVariable long itemId) {
         try {
             itemService.updateMinutes(itemId, minutes);
             return ResponseEntity.ok().build();
@@ -125,8 +150,9 @@ public class ItemController {
     }
 
     @PatchMapping("/items/{itemId}")
-    public ResponseEntity<Void> updateAddress(@RequestBody Item item) {
+    public ResponseEntity updateItem(@Valid @PathVariable long itemId,@RequestBody ItemDto item) {
         try {
+            item.setId(itemId);
             itemService.update(item);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException | BadResourceException ex) {
@@ -136,8 +162,8 @@ public class ItemController {
         }
     }
 
-    @DeleteMapping(path="/items/{itemId}")
-    public ResponseEntity<Void> deleteItemById(@PathVariable long itemId) {
+    @DeleteMapping(path = "/items/{itemId}")
+    public ResponseEntity deleteItemById(@PathVariable long itemId) {
         try {
             itemService.deleteById(itemId);
             return ResponseEntity.ok().build();
