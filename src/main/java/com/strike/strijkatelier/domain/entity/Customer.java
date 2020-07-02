@@ -1,8 +1,7 @@
 package com.strike.strijkatelier.domain.entity;
 
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.strike.strijkatelier.exception.BadResourceException;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,15 +11,17 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "customer")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Getter
 @Setter
-public class Customer {
+public class Customer implements Serializable {
     private static final long serialVersionUID = 4048798961366546485L;
 
     @Id
@@ -29,11 +30,14 @@ public class Customer {
     @NotBlank
     private String emailaddress;
     @NotBlank
-    private String name;
+    private String firstName;
+    @NotBlank
+    private String lastName;
     @NotBlank
     private String phoneNumber;
-    @OneToMany(mappedBy = "customer")
-    private List<Bucket> buckets;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    private List<Basket> baskets;
     private double minutesLeft;
     @Column(length = 4000)
     private String note;
@@ -42,16 +46,17 @@ public class Customer {
     }
 
 
-    public Customer(String emailaddress, String name, String phoneNumber) throws BadResourceException {
+    public Customer(String emailaddress, String firstName, String lastName, String phoneNumber) throws BadResourceException {
         setEmailAddress(emailaddress);
         setPhoneNumber(phoneNumber);
-        this.name = name;
-        buckets = new ArrayList<>();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        baskets = new ArrayList<>();
         minutesLeft = 0.00;
     }
 
-    public void addBucket(Bucket bucket) {
-        buckets.add(bucket);
+    public void addBasket(Basket basket) {
+        baskets.add(basket);
     }
 
 

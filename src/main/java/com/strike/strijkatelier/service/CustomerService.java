@@ -3,7 +3,7 @@ package com.strike.strijkatelier.service;
 import com.strike.strijkatelier.exception.BadResourceException;
 import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
-import com.strike.strijkatelier.domain.entity.Bucket;
+import com.strike.strijkatelier.domain.entity.Basket;
 import com.strike.strijkatelier.domain.entity.Customer;
 import com.strike.strijkatelier.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,17 +64,17 @@ public class CustomerService {
         }
     }
 
-    public void updateBuckets(Long id, List<Bucket> buckets)
+    public void updateBaskets(Long id, List<Basket> baskets)
             throws ResourceNotFoundException {
         Customer customer = findById(id);
-        customer.setBuckets(buckets);
+        customer.setBaskets(baskets);
         customerRepository.save(customer);
     }
 
-    public void addBucket(Long id, Bucket bucket)
+    public void addBasket(Long id, Basket basket)
             throws ResourceNotFoundException {
         Customer customer = findById(id);
-        customer.addBucket(bucket);
+        customer.addBasket(basket);
         customerRepository.save(customer);
     }
 

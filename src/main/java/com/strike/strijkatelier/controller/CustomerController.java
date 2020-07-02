@@ -1,9 +1,9 @@
 package com.strike.strijkatelier.controller;
 
+import com.strike.strijkatelier.domain.entity.Basket;
 import com.strike.strijkatelier.exception.BadResourceException;
 import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
-import com.strike.strijkatelier.domain.entity.Bucket;
 import com.strike.strijkatelier.domain.entity.Customer;
 import com.strike.strijkatelier.service.CustomerService;
 import org.slf4j.Logger;
@@ -91,10 +91,10 @@ public class CustomerController {
     }
 
     @PatchMapping("/{customerId}")
-    public ResponseEntity<Void> updateBuckets(@PathVariable long customerId,
-                                              @RequestBody List<Bucket> buckets) {
+    public ResponseEntity<Void> updateBaskets(@PathVariable long customerId,
+                                              @RequestBody List<Basket> baskets) {
         try {
-            customerService.updateBuckets(customerId, buckets);
+            customerService.updateBaskets(customerId, baskets);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
             // log exception first, then return Not Found (404)
@@ -103,11 +103,11 @@ public class CustomerController {
         }
     }
 
-    @PutMapping("/buckets/{bucketId}")
-    public ResponseEntity<Void> updateBucket(@PathVariable long bucketId,
-                                              @RequestBody List<Bucket> buckets) {
+    @PutMapping("/basket/{basketId}")
+    public ResponseEntity<Void> addBasket(@PathVariable long basketId,
+                                              @RequestBody Basket basket) {
         try {
-            customerService.updateBuckets(bucketId, buckets);
+            customerService.addBasket(basketId, basket);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
             // log exception first, then return Not Found (404)

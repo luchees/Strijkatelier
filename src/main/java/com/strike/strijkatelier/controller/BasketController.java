@@ -1,18 +1,17 @@
 package com.strike.strijkatelier.controller;
 
+import com.strike.strijkatelier.domain.entity.Basket;
+import com.strike.strijkatelier.domain.entity.Item;
 import com.strike.strijkatelier.exception.BadResourceException;
 import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
-import com.strike.strijkatelier.domain.entity.Bucket;
-import com.strike.strijkatelier.domain.entity.Item;
-import com.strike.strijkatelier.service.BucketService;
+import com.strike.strijkatelier.service.BasketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,57 +21,51 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/buckets")
-public class BucketController {
+@RequestMapping("/api/baskets")
+public class BasketController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final int ROW_PER_PAGE = 5;
 
     @Autowired
-    private  BucketService bucketService;
+    private  BasketService basketService;
 
     @GetMapping(value = "/active", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Bucket>> getActiveBuckets() {
-        List<Bucket> buckets = bucketService.getActiveBuckets();
-        return ResponseEntity.ok(buckets);
+    public ResponseEntity<List<Basket>> getActiveBaskets() {
+        List<Basket> baskets = basketService.getActiveBaskets();
+        return ResponseEntity.ok(baskets);
     }
 
     @GetMapping(value = "/active{startDate}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Bucket>> getActiveBucketsByDate(@PathVariable Date startDate) {
-        List<Bucket> buckets = bucketService.getActiveBucketsByDate(startDate);
-        return ResponseEntity.ok(buckets);
+    public ResponseEntity<List<Basket>> getActiveBasketsByDate(@PathVariable Date startDate) {
+        List<Basket> baskets = basketService.getActiveBasketsByDate(startDate);
+        return ResponseEntity.ok(baskets);
     }
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Bucket>> findAll(
-            @RequestParam(value="page", defaultValue="1") int pageNumber,
-            @RequestParam(required=false) Long id) {
-        if (StringUtils.isEmpty(id)) {
-            return ResponseEntity.ok(bucketService.findAll());
-        }
-        else {
-            return ResponseEntity.ok(bucketService.findAll());
-        }
+    public ResponseEntity<List<Basket>> findAll(
+            @RequestParam(value="page", defaultValue="1") int pageNumber){
+            return ResponseEntity.ok(basketService.findAll());
     }
 
-    @GetMapping(value = "/{bucketId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Bucket> findBucketById(@PathVariable long bucketId) {
+    @GetMapping(value = "/{basketId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Basket> findBasketById(@PathVariable long basketId) {
         try {
-            Bucket book = bucketService.findById(bucketId);
-            return ResponseEntity.ok(book);  // return 200, with json body
+            Basket basket = basketService.findById(basketId);
+            return ResponseEntity.ok(basket);  // return 200, with json body
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // return 404, with null body
         }
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity<Bucket> addBucket(@Valid @RequestBody Bucket bucket)
+    public ResponseEntity<Basket> addBasket(@Valid @RequestBody Basket basket)
             throws URISyntaxException {
         try {
-            Bucket newBucket = bucketService.save(bucket);
-            return ResponseEntity.created(new URI("/api/buckets/" + newBucket.getId()))
-                    .body(bucket);
+            Basket newBasket = basketService.save(basket);
+            return ResponseEntity.created(new URI("/api/baskets/" + newBasket.getId()))
+                    .body(basket);
         } catch (ResourceAlreadyExistsException ex) {
             // log exception first, then return Conflict (409)
             logger.error(ex.getMessage());
@@ -84,12 +77,12 @@ public class BucketController {
         }
     }
 
-    @PutMapping(value = "/{bucketId}")
-    public ResponseEntity<Bucket> updateBucket(@Valid @RequestBody Bucket bucket,
-                                                 @PathVariable long bucketId) {
+    @PutMapping(value = "/{basketId}")
+    public ResponseEntity<Basket> updateBasket(@Valid @RequestBody Basket basket,
+                                               @PathVariable long basketId) {
         try {
-            bucket.setId(bucketId);
-            bucketService.update(bucket);
+            basket.setId(basketId);
+            basketService.update(basket);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
             // log exception first, then return Not Found (404)
@@ -102,11 +95,11 @@ public class BucketController {
         }
     }
 
-    @PatchMapping("/{bucketId}")
-    public ResponseEntity<Void> updateAddress(@PathVariable long bucketId,
+    @PatchMapping("/{basketId}")
+    public ResponseEntity<Void> updateAddress(@PathVariable long basketId,
                                               @RequestBody List<Item> items) {
         try {
-            bucketService.updateItems(bucketId, items);
+            basketService.updateItems(basketId, items);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
             // log exception first, then return Not Found (404)
@@ -115,10 +108,10 @@ public class BucketController {
         }
     }
 
-    @DeleteMapping(path="/{bucketId}")
-    public ResponseEntity<Void> deleteBucketById(@PathVariable long bucketId) {
+    @DeleteMapping(path="/{basketId}")
+    public ResponseEntity<Void> deleteBasketById(@PathVariable long basketId) {
         try {
-            bucketService.deleteById(bucketId);
+            basketService.deleteById(basketId);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
             logger.error(ex.getMessage());

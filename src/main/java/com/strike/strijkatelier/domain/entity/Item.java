@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 @Table(name = "item")
@@ -32,9 +33,9 @@ public class Item {
     public double price;
 
     public int minutes;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn (name="bucket_id")
-    private Bucket bucket;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinColumn (name="basket_id")
+    private List<Basket> baskets;
 
 
 }
