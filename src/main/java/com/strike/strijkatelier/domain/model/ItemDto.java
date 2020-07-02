@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 
 @ApiModel(value = "ItemDto", description = "Request for Items")
@@ -22,10 +23,12 @@ public class ItemDto {
     @DecimalMin("0")
     private int minutes;
 
+    private List<BasketDto> basketDtos;
+
     public ItemDto() {
     }
 
-    @ApiModelProperty(position = 1, required = false, dataType = "int", example = "3", notes = "Id of the item")
+    @ApiModelProperty(position = 1, required = false, dataType = "number", example = "3", notes = "Id of the item")
     public long getId() {
         return id;
     }
@@ -43,7 +46,7 @@ public class ItemDto {
         this.itemName = itemName;
     }
 
-    @ApiModelProperty(position = 3, required = true, dataType = "Double", example = "3.50", notes = "Price of the item")
+    @ApiModelProperty(position = 3, required = true, dataType = "number", example = "3.50", notes = "Price of the item")
 
     public double getPrice() {
         return price;
@@ -53,7 +56,7 @@ public class ItemDto {
         this.price = price;
     }
 
-    @ApiModelProperty(position = 4, required = true, dataType = "int", example = "10", notes = "Minutes of the item")
+    @ApiModelProperty(position = 4, required = true, dataType = "number", example = "10", notes = "Minutes of the item")
     public int getMinutes() {
         return minutes;
     }
@@ -62,5 +65,12 @@ public class ItemDto {
         this.minutes = minutes;
     }
 
+    @ApiModelProperty(position = 5, required = true, dataType = "array", example = "10", notes = "baskets of the item")
+    public List<BasketDto> getBasketDtos() {
 
+        return basketDtos;
+    }
+    public void setBasketDtos(List<BasketDto> baskets) {
+        this.basketDtos = baskets;
+    }
 }

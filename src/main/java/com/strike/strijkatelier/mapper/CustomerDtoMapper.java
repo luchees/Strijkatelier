@@ -3,11 +3,17 @@ package com.strike.strijkatelier.mapper;
 
 import com.strike.strijkatelier.domain.entity.Customer;
 import com.strike.strijkatelier.domain.model.CustomerDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 
 @Component
 public class CustomerDtoMapper {
+
+    @Autowired
+    private BasketDtoMapper mapper;
 
     public CustomerDtoMapper() {
     }
@@ -20,7 +26,9 @@ public class CustomerDtoMapper {
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         customer.setMinutesLeft(customerDto.getMinutesLeft());
-        customer.setBaskets(customerDto.getBaskets());
+        customer.setBaskets(customerDto.getBasketDtos().stream()
+                .map(mapper::mapToBasket)
+                .collect(Collectors.toList()));
         return customer;
     }
 
@@ -31,7 +39,9 @@ public class CustomerDtoMapper {
         customerDto.setPhoneNumber(customer.getPhoneNumber());
         customerDto.setFirstName(customer.getFirstName());
         customerDto.setLastName(customer.getLastName());
-        customerDto.setBaskets(customer.getBaskets());
+        customerDto.setBasketDtos(customer.getBaskets().stream()
+                .map(mapper::mapToBasketDto)
+                .collect(Collectors.toList()));
         return customerDto;
     }
 }

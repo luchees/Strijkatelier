@@ -1,18 +1,14 @@
 package com.strike.strijkatelier.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.strike.strijkatelier.domain.entity.Basket;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.annotation.MatchesPattern;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-@ApiModel(value = "ItemDto", description = "Request for Items")
+@ApiModel(value = "CustomerDto", description = "CustomersDto")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerDto {
 
@@ -27,14 +23,11 @@ public class CustomerDto {
     private String lastName;
     @NotEmpty
     private String phoneNumber;
-
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
-    private List<Basket> baskets;
+    private List<BasketDto> basketDtos;
     private double minutesLeft;
-    @Column(length = 4000)
     private String note;
 
-    @ApiModelProperty(position = 1, required = false, dataType = "int", example = "3", notes = "Id of the Customer")
+    @ApiModelProperty(position = 1, required = false, dataType = "number", example = "3", notes = "Id of the Customer")
     public Long getId() {
         return id;
     }
@@ -74,15 +67,15 @@ public class CustomerDto {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    @ApiModelProperty(position = 6, required = false, dataType = "List", example = "3", notes = "Baskets of the customer")
-    public List<Basket> getBaskets() {
-        return baskets;
+    @ApiModelProperty(position = 6, required = false, dataType = "array", example = "3", notes = "Baskets of the customer")
+    public List<BasketDto> getBasketDtos() {
+        return basketDtos;
     }
 
-    public void setBaskets(List<Basket> baskets) {
-        this.baskets = baskets;
+    public void setBasketDtos(List<BasketDto> basketDtos) {
+        this.basketDtos = basketDtos;
     }
-    @ApiModelProperty(position = 7, required = true, dataType = "int", example = "3", notes = "MinutesLeft of the customer")
+    @ApiModelProperty(position = 7, required = true, dataType = "number", example = "3", notes = "MinutesLeft of the customer")
     public double getMinutesLeft() {
         return minutesLeft;
     }

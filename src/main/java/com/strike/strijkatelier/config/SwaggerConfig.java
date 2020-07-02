@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -11,8 +12,11 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.SwaggerResource;
+import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Configuration for the Swagger-UI
@@ -27,6 +31,21 @@ public class SwaggerConfig {
         this.swaggerEnabled = swaggerEnabled;
     }
 
+//    @Primary
+//    @Bean
+//    public SwaggerResourcesProvider swaggerResourcesProvider() {
+//        return () -> {
+//            SwaggerResource wsResource = new SwaggerResource();
+//            wsResource.setName("Documentation");
+//            wsResource.setSwaggerVersion("2.0");
+//            wsResource.setLocation("/swagger-config.yml");
+//
+//            List<SwaggerResource> resources = List.of(wsResource);
+//            return resources;
+//        };
+//    }
+
+
     @Bean
     public Docket internalApi() {
         Docket thisDocket;
@@ -34,7 +53,7 @@ public class SwaggerConfig {
                 .groupName("Strijkatelier API")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage( "com.strike.strijkatelier.controller" ))
+                .apis(RequestHandlerSelectors.basePackage("com.strike.strijkatelier.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .pathMapping("/")

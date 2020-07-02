@@ -58,7 +58,7 @@ public class ItemController {
     public ResponseEntity<Item> findItemById(@PathVariable long itemId) {
         try {
             Item book = itemService.findById(itemId);
-            return ResponseEntity.ok(book);  // return 200, with json body
+            return ResponseEntity.ok(book);
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // return 404, with null body
         }
@@ -105,7 +105,13 @@ public class ItemController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-
+    @ApiOperation(value = "update item", nickname = "updateItem", notes = "update item in database")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "{item}"),
+            @ApiResponse(code = 404, message = "Item does not exist"),
+            @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     @PutMapping(value = "/items/{itemId}")
     public ResponseEntity<ItemDto> updateItem(@Valid @RequestBody ItemDto item,
                                            @PathVariable long itemId) {
@@ -114,54 +120,56 @@ public class ItemController {
             itemService.update(item);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
-            // log exception first, then return Not Found (404)
             logger.error(ex.getMessage());
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (BadResourceException ex) {
-            // log exception first, then return Bad Request (400)
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-
+    @ApiOperation(value = "update price of item", nickname = "updatePrice", notes = "update price of item in database")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Price is updated"),
+            @ApiResponse(code = 404, message = "Item does not exist"),
+            @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     @PatchMapping("/item/{itemId}/price")
     public ResponseEntity updatePrice(@Valid @RequestBody double price, @PathVariable long itemId) {
         try {
             itemService.updatePrice(itemId, price);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
-            // log exception first, then return Not Found (404)
             logger.error(ex.getMessage());
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
+    @ApiOperation(value = "update minutes of item", nickname = "updateMinute", notes = "update minutes of item in database")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Minutes are updated"),
+            @ApiResponse(code = 404, message = "Item does not exist"),
+            @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     @PatchMapping("/item/{itemId}/minutes")
     public ResponseEntity updateMinutes(@Valid @RequestBody int minutes, @PathVariable long itemId) {
         try {
             itemService.updateMinutes(itemId, minutes);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
-            // log exception first, then return Not Found (404)
             logger.error(ex.getMessage());
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
-    @PatchMapping("/items/{itemId}")
-    public ResponseEntity updateItem(@Valid @PathVariable long itemId,@RequestBody ItemDto item) {
-        try {
-            item.setId(itemId);
-            itemService.update(item);
-            return ResponseEntity.ok().build();
-        } catch (ResourceNotFoundException | BadResourceException ex) {
-            // log exception first, then return Not Found (404)
-            logger.error(ex.getMessage());
-            return ResponseEntity.notFound().build();
-        }
-    }
-
+    @ApiOperation(value = "delete item", nickname = "deleteItem", notes = "delete item in database")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Item is deleted"),
+            @ApiResponse(code = 404, message = "Item does not exist"),
+            @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     @DeleteMapping(path = "/items/{itemId}")
     public ResponseEntity deleteItemById(@PathVariable long itemId) {
         try {
@@ -169,7 +177,7 @@ public class ItemController {
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
             logger.error(ex.getMessage());
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

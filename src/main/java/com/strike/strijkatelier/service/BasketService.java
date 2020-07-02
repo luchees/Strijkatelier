@@ -1,10 +1,13 @@
 package com.strike.strijkatelier.service;
 
 import com.strike.strijkatelier.domain.entity.Basket;
+import com.strike.strijkatelier.domain.model.BasketDto;
+import com.strike.strijkatelier.domain.model.ItemDto;
 import com.strike.strijkatelier.exception.BadResourceException;
 import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
-import com.strike.strijkatelier.domain.entity.Item;
+import com.strike.strijkatelier.mapper.BasketDtoMapper;
+import com.strike.strijkatelier.mapper.ItemDtoMapper;
 import com.strike.strijkatelier.repository.BasketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,32 +23,44 @@ public class BasketService {
     @Autowired
     private BasketRepository basketRepository;
 
+    @Autowired
+    private BasketDtoMapper mapper;
+    @Autowired
+    private ItemDtoMapper itemDtoMapper;
 
     private boolean existsById(Long id) {
         return basketRepository.existsById(id);
     }
 
-    public Basket findById(Long id) throws ResourceNotFoundException {
+    public BasketDto findById(Long id) throws ResourceNotFoundException {
         Basket basket = basketRepository.findById(id).orElse(null);
         if (basket == null) {
             throw new ResourceNotFoundException("Cannot find Basket with id: " + id);
-        } else return basket;
+        } else return mapper.mapToBasketDto(basket);
     }
 
-    public List<Basket> findAll() {
-        List<Basket> baskets = new ArrayList<>();
-        basketRepository.findAll().forEach(baskets::add);
-        return baskets;
+    public List<BasketDto> findAll() {
+        List<BasketDto> basketDtos = new ArrayList<>();
+        List<Basket> baskets = basketRepository.findAll();
+
+        if (!baskets.isEmpty()) {
+            baskets.forEach(basket ->
+                    basketDtos.add(mapper.mapToBasketDto(basket))
+            );
+        }
+
+        return basketDtos;
     }
 
 
-    public Basket save(Basket basket) throws BadResourceException, ResourceAlreadyExistsException {
-        if (!StringUtils.isEmpty(basket.getId())) {
-            if (basket.getId() != null && existsById(basket.getId())) {
-                throw new ResourceAlreadyExistsException("Basket with id: " + basket.getId() +
+    public BasketDto save(BasketDto basketDto) throws BadResourceException, ResourceAlreadyExistsException {
+        if (!StringUtils.isEmpty(basketDto.getId())) {
+            if (basketDto.getId() != null && existsById(basketDto.getId())) {
+                throw new ResourceAlreadyExistsException("Basket with id: " + basketDto.getId() +
                         " already exists");
             }
-            return basketRepository.save(basket);
+            Basket basket = mapper.mapToBasket(basketDto);
+            return mapper.mapToBasketDto(basketRepository.save(basket));
         } else {
             BadResourceException exc = new BadResourceException("Failed to save basket");
             exc.addErrorMessage("Basket is null or empty");
@@ -53,12 +68,31 @@ public class BasketService {
         }
     }
 
-    public void update(Basket basket)
-            throws BadResourceException, ResourceNotFoundException {
-        if (!StringUtils.isEmpty(basket.getId())) {
-            if (!existsById(basket.getId())) {
-                throw new ResourceNotFoundException("Cannot find Basket with id: " + basket.getId());
+    public BasketDto updateItems(long basketId, List<ItemDto> itemDtos) throws BadResourceException, ResourceNotFoundException {
+        if (!StringUtils.isEmpty(basketId)) {
+            if (!existsById(basketId)) {
+                throw new ResourceNotFoundException("Cannot find Basket with id: " + basketId);
             }
+            BasketDto basketDto = findById(basketId);
+            basketDto.addItemDtos(itemDtos);
+            basketRepository.save(mapper.mapToBasket(basketDto));
+            return basketDto;
+        } else {
+            BadResourceException exc = new BadResourceException("Failed to save basket");
+            exc.addErrorMessage("Basket is null or empty");
+            throw exc;
+        }
+
+
+    }
+
+    public void update(BasketDto basketDto)
+            throws BadResourceException, ResourceNotFoundException {
+        if (!StringUtils.isEmpty(basketDto.getId())) {
+            if (!existsById(basketDto.getId())) {
+                throw new ResourceNotFoundException("Cannot find Basket with id: " + basketDto.getId());
+            }
+            Basket basket = mapper.mapToBasket(basketDto);
             basketRepository.save(basket);
         } else {
             BadResourceException exc = new BadResourceException("Failed to save basket");
@@ -67,11 +101,11 @@ public class BasketService {
         }
     }
 
-    public void updateItems(Long id, List<Item> items)
+    public void setItems(Long basketId, List<ItemDto> itemDtos)
             throws ResourceNotFoundException {
-        Basket basket = findById(id);
-        basket.setItems(items);
-        basketRepository.save(basket);
+        BasketDto basketDto = findById(basketId);
+        basketDto.setItemDtos(itemDtos);
+        basketRepository.save(mapper.mapToBasket(basketDto));
     }
 
     public void deleteById(Long id) throws ResourceNotFoundException {
@@ -82,14 +116,20 @@ public class BasketService {
         }
     }
 
-    public List<Basket> getActiveBaskets() {
-        List<Basket> baskets = basketRepository.getBasketsByActive(true);
-        return baskets;
+    public List<BasketDto> getActiveBaskets() {
+        List<BasketDto> basketDtos = new ArrayList<>();
+        basketRepository.getBasketsByActive(true).forEach(basket ->
+                basketDtos.add(mapper.mapToBasketDto(basket))
+        );
+        return basketDtos;
     }
 
-    public List<Basket> getActiveBasketsByDate(Date startDate) {
-        List<Basket> baskets = basketRepository.getBasketsByActiveAndStartDateTime(true,startDate);
-        return baskets;
+    public List<BasketDto> getActiveBasketsByDate(Date startDate) {
+        List<BasketDto> basketDtos = new ArrayList<>();
+        basketRepository.getBasketsByActiveAndStartDateTime(true, startDate).forEach(basket ->
+                basketDtos.add(mapper.mapToBasketDto(basket))
+        );
+        return basketDtos;
     }
 
     public Long count() {

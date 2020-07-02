@@ -1,0 +1,1436 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: Strijkaterlier API
+  contact:
+    name: Lucas Vda
+host: 'localhost:8081'
+basePath: /
+tags:
+  - name: basket-management
+    description: Basket Management API
+  - name: customer-management
+    description: Customer Management API
+  - name: item-management
+    description: Item Management API
+  - name: user-management
+    description: User Management API
+paths:
+  /api/baskets/:
+    get:
+      tags:
+        - basket-management
+      summary: 'get all baskets '
+      description: 'Gets all baskets from database '
+      operationId: getBaskets
+      produces:
+        - application/json
+      parameters:
+        - name: page
+          in: query
+          description: page
+          required: false
+          type: integer
+          default: 1
+          format: int32
+      responses:
+        '200':
+          description: '{baskets}'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/BasketDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal server error
+      deprecated: false
+    post:
+      tags:
+        - basket-management
+      summary: adds basket
+      description: 'adds a basket to the database '
+      operationId: addBasket
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: basketDto
+          description: basketDto
+          required: true
+          schema:
+            $ref: '#/definitions/BasketDto_1'
+      responses:
+        '200':
+          description: '{basket}'
+          schema:
+            $ref: '#/definitions/BasketDto'
+        '201':
+          description: Created
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '409':
+          description: 'basket already exists {basketId}'
+        '500':
+          description: Internal server error
+      deprecated: false
+  /api/baskets/active:
+    get:
+      tags:
+        - basket-management
+      summary: get active baskets
+      description: Gets all active baskets from database
+      operationId: getActiveBaskets
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: '{baskets}'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/BasketDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal server error
+      deprecated: false
+  '/api/baskets/active/{startDate}':
+    get:
+      tags:
+        - basket-management
+      summary: get active baskets by startDate
+      description: Gets all active baskets by startdate from database
+      operationId: getActiveBasketsByStartDate
+      produces:
+        - application/json
+      parameters:
+        - name: startDate
+          in: path
+          description: startDate
+          required: true
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: '{baskets}'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/BasketDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal server error
+      deprecated: false
+  '/api/baskets/{basketId}':
+    get:
+      tags:
+        - basket-management
+      summary: 'get basket by id '
+      description: Gets baskets by id from database
+      operationId: getBasketsById
+      produces:
+        - application/json
+      parameters:
+        - name: basketId
+          in: path
+          description: basketId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: '{basket}'
+          schema:
+            $ref: '#/definitions/BasketDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: 'no basket found with name {itemName}'
+        '500':
+          description: Internal server error
+      deprecated: false
+    put:
+      tags:
+        - basket-management
+      summary: updates basket
+      description: 'updates a basket to the database '
+      operationId: updateBasket
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: basketDto
+          description: basketDto
+          required: true
+          schema:
+            $ref: '#/definitions/BasketDto_1'
+        - name: basketId
+          in: path
+          description: basketId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: '{basket}'
+          schema:
+            $ref: '#/definitions/BasketDto'
+        '201':
+          description: Created
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: 'basket doesnt exists {basketId}'
+        '500':
+          description: Internal server error
+      deprecated: false
+    delete:
+      tags:
+        - basket-management
+      summary: delete basket
+      description: 'delets a basket to the database '
+      operationId: deleteBasket
+      produces:
+        - '*/*'
+      parameters:
+        - name: basketId
+          in: path
+          description: basketId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: '{basket}'
+        '204':
+          description: No Content
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: 'basket doesnt exists {basketId}'
+        '500':
+          description: Internal server error
+      deprecated: false
+    patch:
+      tags:
+        - basket-management
+      summary: set items in basket
+      description: 'sets the items of a basket to the database '
+      operationId: setItems
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: basketId
+          in: path
+          description: basketId
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          name: itemDtos
+          description: itemDtos
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ItemDto_1'
+      responses:
+        '200':
+          description: '{basket}'
+        '204':
+          description: No Content
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: 'basket doesnt exists {basketId}'
+        '500':
+          description: Internal server error
+      deprecated: false
+  '/api/baskets/{basketId}/items':
+    post:
+      tags:
+        - basket-management
+      summary: adds item in basket
+      description: 'adds  item of a basket to the database '
+      operationId: addItem
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: basketId
+          in: path
+          description: basketId
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          name: itemDto
+          description: itemDto
+          required: true
+          schema:
+            $ref: '#/definitions/ItemDto_1'
+      responses:
+        '200':
+          description: '{basket}'
+          schema:
+            $ref: '#/definitions/BasketDto'
+        '201':
+          description: Created
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: 'basket doesnt exists {basketId}'
+        '500':
+          description: Internal server error
+      deprecated: false
+  /api/customer/:
+    get:
+      tags:
+        - customer-management
+      summary: Get all customers
+      description: Gets all customers from the database
+      operationId: getAllCustomers
+      produces:
+        - application/json
+      parameters:
+        - name: page
+          in: query
+          description: page
+          required: false
+          type: integer
+          default: 1
+          format: int32
+      responses:
+        '200':
+          description: User was successfully registered
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CustomerDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: No items found in the database
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+      deprecated: false
+    post:
+      tags:
+        - customer-management
+      summary: add a customer
+      description: add a customer to the database
+      operationId: addCustomer
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: customerDto
+          description: customerDto
+          required: true
+          schema:
+            $ref: '#/definitions/CustomerDto_1'
+      responses:
+        '200':
+          description: Customer was successfully registered
+          schema:
+            $ref: '#/definitions/CustomerDto'
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '409':
+          description: Customer already exists
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+      deprecated: false
+  '/api/customer/basket/{basketId}':
+    put:
+      tags:
+        - customer-management
+      summary: updates a basket from a customer
+      description: update a basket of a customer in the database
+      operationId: updateBasketFromCustomer
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: basket
+          description: basket
+          required: true
+          schema:
+            $ref: '#/definitions/Basket'
+        - name: basketId
+          in: path
+          description: basketId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: basket is successfully updated
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: customer is not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+      deprecated: false
+  '/api/customer/{customerId}':
+    get:
+      tags:
+        - customer-management
+      summary: Get a customer
+      description: Gets a customer from the database
+      operationId: getACustomer
+      produces:
+        - application/json
+      parameters:
+        - name: customerId
+          in: path
+          description: customerId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: User was successfully registered
+          schema:
+            $ref: '#/definitions/CustomerDto'
+        '400':
+          description: No Customer was found
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal server error
+      deprecated: false
+    put:
+      tags:
+        - customer-management
+      summary: update a customer
+      description: update customer in the database
+      operationId: updateCustomer
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: customerDto
+          description: customerDto
+          required: true
+          schema:
+            $ref: '#/definitions/CustomerDto_1'
+        - name: customerId
+          in: path
+          description: customerId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Customer was successfully updated
+          schema:
+            $ref: '#/definitions/Customer'
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Customer was not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+      deprecated: false
+    delete:
+      tags:
+        - customer-management
+      summary: delete customer
+      description: deletes a customer in the database
+      operationId: deleteCustomer
+      produces:
+        - '*/*'
+      parameters:
+        - name: customerId
+          in: path
+          description: customerId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: customer is successfully deleted
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: customer was not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+      deprecated: false
+    patch:
+      tags:
+        - customer-management
+      summary: update baskets from a customer
+      description: update baskets of customer in the database
+      operationId: updateBasketsFromCustomer
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: baskets
+          description: baskets
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Basket'
+        - name: customerId
+          in: path
+          description: customerId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: baskets are successfully updated
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: customer is not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+      deprecated: false
+  /api/item:
+    get:
+      tags:
+        - item-management
+      summary: get item by name
+      description: Gets item from database by name
+      operationId: getAllItemsByName
+      produces:
+        - application/json
+      parameters:
+        - name: itemName
+          in: query
+          description: itemName
+          required: true
+          type: string
+      responses:
+        '200':
+          description: '{item}'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ItemDto'
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: 'no item found with name {itemName}'
+        '500':
+          description: Internal server error
+      deprecated: false
+  '/api/item/{itemId}/minutes':
+    patch:
+      tags:
+        - item-management
+      summary: update minutes of item
+      description: update minutes of item in database
+      operationId: updateMinute
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: itemId
+          in: path
+          description: itemId
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          name: minutes
+          description: minutes
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Minutes are updated
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Item does not exist
+        '500':
+          description: Internal server error
+      deprecated: false
+  '/api/item/{itemId}/price':
+    patch:
+      tags:
+        - item-management
+      summary: update price of item
+      description: update price of item in database
+      operationId: updatePrice
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: itemId
+          in: path
+          description: itemId
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          name: price
+          description: price
+          required: true
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: Price is updated
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Item does not exist
+        '500':
+          description: Internal server error
+      deprecated: false
+  /api/items:
+    get:
+      tags:
+        - item-management
+      summary: get all items
+      description: Gets all items from database
+      operationId: getAllItems
+      produces:
+        - application/json
+      parameters:
+        - name: page
+          in: query
+          description: page
+          required: false
+          type: integer
+          default: 1
+          format: int32
+      responses:
+        '200':
+          description: '{getAllItems}'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ItemDto'
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal server error
+      deprecated: false
+    post:
+      tags:
+        - item-management
+      summary: add item
+      description: add item to database
+      operationId: getItemByName
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: item
+          description: item
+          required: true
+          schema:
+            $ref: '#/definitions/ItemDto_1'
+      responses:
+        '200':
+          description: '{item}'
+          schema:
+            $ref: '#/definitions/ItemDto'
+        '201':
+          description: Created
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '409':
+          description: Resource Already exists
+        '500':
+          description: Internal server error
+      deprecated: false
+  '/api/items/{itemId}':
+    get:
+      tags:
+        - item-management
+      summary: get item by id
+      description: Gets item from database by id
+      operationId: getItemById
+      produces:
+        - application/json
+      parameters:
+        - name: itemId
+          in: path
+          description: itemId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: '{item}'
+          schema:
+            $ref: '#/definitions/Item'
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal server error
+      deprecated: false
+    put:
+      tags:
+        - item-management
+      summary: update item
+      description: update item in database
+      operationId: updateItem
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: item
+          description: item
+          required: true
+          schema:
+            $ref: '#/definitions/ItemDto_1'
+        - name: itemId
+          in: path
+          description: itemId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: '{item}'
+          schema:
+            $ref: '#/definitions/ItemDto'
+        '201':
+          description: Created
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Item does not exist
+        '500':
+          description: Internal server error
+      deprecated: false
+    delete:
+      tags:
+        - item-management
+      summary: delete item
+      description: delete item in database
+      operationId: deleteItem
+      produces:
+        - '*/*'
+      parameters:
+        - name: itemId
+          in: path
+          description: itemId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Item is deleted
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Item does not exist
+        '500':
+          description: Internal server error
+      deprecated: false
+  /api/users/register:
+    post:
+      tags:
+        - user-management
+      summary: Register a User
+      description: Register a new system user
+      operationId: registerUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/RegistrationRequest'
+      responses:
+        '200':
+          description: User was successfully registered
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '201':
+          description: Created
+        '400':
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/Errors'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal server error
+      deprecated: false
+definitions:
+  Basket:
+    type: object
+    properties:
+      active:
+        type: boolean
+      cash:
+        type: boolean
+      customer:
+        $ref: '#/definitions/Customer'
+      doneDateTime:
+        type: string
+      id:
+        type: integer
+        format: int64
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Item'
+      price:
+        type: number
+        format: double
+      startDateTime:
+        type: string
+    title: Basket
+  BasketDto:
+    type: object
+    required:
+      - active
+      - cash
+      - customerDto
+      - doneDateTime
+      - itemDtos
+      - startDateTime
+    properties:
+      customerDto:
+        example:
+          customerDto: null
+        description: Customer of the basket
+        $ref: '#/definitions/CustomerDto'
+      id:
+        type: integer
+        format: int64
+        example: 3
+        description: Id of the Basket
+      active:
+        type: boolean
+        example: true
+        description: Is basket active
+      startDateTime:
+        type: string
+        example: '2/07/2020T18:57:20'
+        description: Startdate of the Basket
+      doneDateTime:
+        type: string
+        example: '2/07/2020T18:57:20'
+        description: Date when Basket is done
+      itemDtos:
+        type: array
+        example:
+          items: null
+        description: items of the Basket
+        items:
+          $ref: '#/definitions/ItemDto'
+      price:
+        type: number
+        format: double
+        example: 20
+        description: Startdate of the Basket
+      cash:
+        type: boolean
+        example: false
+        description: payment method of Basket
+    title: BasketDto
+    description: Request for Basket
+  BasketDto_1:
+    type: object
+    required:
+      - active
+      - cash
+      - customerDto
+      - doneDateTime
+      - itemDtos
+      - startDateTime
+    properties:
+      customerDto:
+        example:
+          customerDto: null
+        description: Customer of the basket
+        $ref: '#/definitions/CustomerDto_1'
+      id:
+        type: integer
+        format: int64
+        example: 3
+        description: Id of the Basket
+      active:
+        type: boolean
+        example: true
+        description: Is basket active
+      startDateTime:
+        type: string
+        example: '2/07/2020T18:57:20'
+        description: Startdate of the Basket
+      doneDateTime:
+        type: string
+        example: '2/07/2020T18:57:20'
+        description: Date when Basket is done
+      itemDtos:
+        type: array
+        example:
+          items: null
+        description: items of the Basket
+        items:
+          $ref: '#/definitions/ItemDto_1'
+      price:
+        type: number
+        format: double
+        example: 20
+        description: Startdate of the Basket
+      cash:
+        type: boolean
+        example: false
+        description: payment method of Basket
+    title: BasketDto_1
+    description: Request for Basket
+  Customer:
+    type: object
+    properties:
+      baskets:
+        type: array
+        items:
+          $ref: '#/definitions/Basket'
+      emailaddress:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+        format: int64
+      lastName:
+        type: string
+      minutesLeft:
+        type: number
+        format: double
+      note:
+        type: string
+      phoneNumber:
+        type: string
+    title: Customer
+  CustomerDto:
+    type: object
+    required:
+      - emailaddress
+      - firstName
+      - lastName
+      - minutesLeft
+      - phoneNumber
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 3
+        description: Id of the Customer
+      emailaddress:
+        type: string
+        example: 3
+        description: Email of the customer
+      firstName:
+        type: string
+        example: 3
+        description: Firstname of the customer
+      lastName:
+        type: string
+        example: 3
+        description: Lastname of the customer
+      phoneNumber:
+        type: string
+        example: 3
+        description: Phonenumber of the customer
+      basketDtos:
+        type: array
+        example: 3
+        description: Baskets of the customer
+        items:
+          $ref: '#/definitions/BasketDto'
+      minutesLeft:
+        type: number
+        format: double
+        example: 3
+        description: MinutesLeft of the customer
+      note:
+        type: string
+        example: 3
+        description: Notes of the customer
+    title: CustomerDto
+    description: CustomersDto
+  CustomerDto_1:
+    type: object
+    required:
+      - firstName
+      - lastName
+      - minutesLeft
+      - phoneNumber
+    properties:
+      emailAddress:
+        type: string
+      emailaddress:
+        type: string
+      id:
+        type: integer
+        format: int64
+        example: 3
+        description: Id of the Customer
+      firstName:
+        type: string
+        example: 3
+        description: Firstname of the customer
+      lastName:
+        type: string
+        example: 3
+        description: Lastname of the customer
+      phoneNumber:
+        type: string
+        example: 3
+        description: Phonenumber of the customer
+      basketDtos:
+        type: array
+        example: 3
+        description: Baskets of the customer
+        items:
+          $ref: '#/definitions/BasketDto_1'
+      minutesLeft:
+        type: number
+        format: double
+        example: 3
+        description: MinutesLeft of the customer
+      note:
+        type: string
+        example: 3
+        description: Notes of the customer
+    title: CustomerDto_1
+    description: CustomersDto
+  ErrorInfo:
+    type: object
+    required:
+      - description
+      - message
+    properties:
+      message:
+        type: string
+        example: Missing field userName
+        description: Error Message
+      description:
+        type: string
+        example: userName field is required for registering a new user
+        description: Description of the problem
+      moreInfo:
+        type: string
+        example: Please make sure that the requestbody contains the field userName
+        description: More information on the problem and or recommendations to resolve the error
+    title: ErrorInfo
+    description: Error detail
+  Errors:
+    type: object
+    required:
+      - errors
+    properties:
+      errors:
+        type: array
+        description: List of ErrorInfo
+        items:
+          $ref: '#/definitions/ErrorInfo'
+    title: Errors
+    description: List of Errors that occurred
+  Item:
+    type: object
+    properties:
+      baskets:
+        type: array
+        items:
+          $ref: '#/definitions/Basket'
+      id:
+        type: integer
+        format: int64
+      itemName:
+        type: string
+      minutes:
+        type: integer
+        format: int32
+      price:
+        type: number
+        format: double
+    title: Item
+  ItemDto:
+    type: object
+    required:
+      - itemName
+      - minutes
+      - price
+    properties:
+      basketDtos:
+        type: array
+        items:
+          $ref: '#/definitions/BasketDto'
+      id:
+        type: integer
+        format: int64
+        example: 3
+        description: Id of the item
+      itemName:
+        type: string
+        example: Rok
+        description: Name of the item
+      price:
+        type: number
+        format: double
+        example: 3.5
+        description: Price of the item
+      minutes:
+        type: integer
+        format: int32
+        example: 10
+        description: Minutes of the item
+    title: ItemDto
+    description: Request for Items
+  ItemDto_1:
+    type: object
+    required:
+      - itemName
+      - minutes
+      - price
+    properties:
+      basketDtos:
+        type: array
+        items:
+          $ref: '#/definitions/BasketDto_1'
+      id:
+        type: integer
+        format: int64
+        example: 3
+        description: Id of the item
+      itemName:
+        type: string
+        example: Rok
+        description: Name of the item
+      price:
+        type: number
+        format: double
+        example: 3.5
+        description: Price of the item
+      minutes:
+        type: integer
+        format: int32
+        example: 10
+        description: Minutes of the item
+    title: ItemDto_1
+    description: Request for Items
+  RegistrationRequest:
+    type: object
+    required:
+      - email
+      - firstName
+      - lastName
+      - matchingPassword
+      - password
+    properties:
+      firstName:
+        type: string
+        example: Lucas
+        description: First name of the user
+      lastName:
+        type: string
+        example: Van den Abbeele
+        description: Last name of the user
+      email:
+        type: string
+        example: jon.doe@gmail.com
+        description: Email of the user
+      password:
+        type: string
+        description: Password of the user
+      matchingPassword:
+        type: string
+        description: Field to verify if password matches
+    title: RegistrationRequest
+    description: Request for user registration
+  ResponseEntity:
+    type: object
+    properties:
+      body:
+        type: object
+      statusCode:
+        type: string
+        enum:
+          - CONTINUE
+          - SWITCHING_PROTOCOLS
+          - PROCESSING
+          - CHECKPOINT
+          - OK
+          - CREATED
+          - ACCEPTED
+          - NON_AUTHORITATIVE_INFORMATION
+          - NO_CONTENT
+          - RESET_CONTENT
+          - PARTIAL_CONTENT
+          - MULTI_STATUS
+          - ALREADY_REPORTED
+          - IM_USED
+          - MULTIPLE_CHOICES
+          - MOVED_PERMANENTLY
+          - FOUND
+          - MOVED_TEMPORARILY
+          - SEE_OTHER
+          - NOT_MODIFIED
+          - USE_PROXY
+          - TEMPORARY_REDIRECT
+          - PERMANENT_REDIRECT
+          - BAD_REQUEST
+          - UNAUTHORIZED
+          - PAYMENT_REQUIRED
+          - FORBIDDEN
+          - NOT_FOUND
+          - METHOD_NOT_ALLOWED
+          - NOT_ACCEPTABLE
+          - PROXY_AUTHENTICATION_REQUIRED
+          - REQUEST_TIMEOUT
+          - CONFLICT
+          - GONE
+          - LENGTH_REQUIRED
+          - PRECONDITION_FAILED
+          - PAYLOAD_TOO_LARGE
+          - REQUEST_ENTITY_TOO_LARGE
+          - URI_TOO_LONG
+          - REQUEST_URI_TOO_LONG
+          - UNSUPPORTED_MEDIA_TYPE
+          - REQUESTED_RANGE_NOT_SATISFIABLE
+          - EXPECTATION_FAILED
+          - I_AM_A_TEAPOT
+          - INSUFFICIENT_SPACE_ON_RESOURCE
+          - METHOD_FAILURE
+          - DESTINATION_LOCKED
+          - UNPROCESSABLE_ENTITY
+          - LOCKED
+          - FAILED_DEPENDENCY
+          - TOO_EARLY
+          - UPGRADE_REQUIRED
+          - PRECONDITION_REQUIRED
+          - TOO_MANY_REQUESTS
+          - REQUEST_HEADER_FIELDS_TOO_LARGE
+          - UNAVAILABLE_FOR_LEGAL_REASONS
+          - INTERNAL_SERVER_ERROR
+          - NOT_IMPLEMENTED
+          - BAD_GATEWAY
+          - SERVICE_UNAVAILABLE
+          - GATEWAY_TIMEOUT
+          - HTTP_VERSION_NOT_SUPPORTED
+          - VARIANT_ALSO_NEGOTIATES
+          - INSUFFICIENT_STORAGE
+          - LOOP_DETECTED
+          - BANDWIDTH_LIMIT_EXCEEDED
+          - NOT_EXTENDED
+          - NETWORK_AUTHENTICATION_REQUIRED
+      statusCodeValue:
+        type: integer
+        format: int32
+    title: ResponseEntity
