@@ -135,5 +135,22 @@ public class BasketService {
     public Long count() {
         return basketRepository.count();
     }
+
+    public BasketDto calculatePrice(BasketDto basketDto){
+
+        List<ItemDto> itemDtos = basketDto.getItemDtos();
+        double price=0.0;
+        for (ItemDto itemDto: itemDtos){
+            if (basketDto.cash){
+                price+=itemDto.getPrice();
+            }
+            else {
+                price+=itemDto.getMinutes();
+            }
+        }
+        basketDto.setPrice(price);
+        Basket basket = mapper.mapToBasket(basketDto);
+        return mapper.mapToBasketDto(basketRepository.save(basket));
+    }
 }
 

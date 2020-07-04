@@ -34,14 +34,17 @@ function App() {
                         <Route path="/login">
                             <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
                         </Route>
-                        <Route path="/home">
-                            <Home/>
-                        </Route>
+
                         <PrivateRoute path="/admin" component={Admin}/>
                         <PrivateRoute path="/account/change-password" component={ChangePassword}/>
 
-                        <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
+
                     </div>
+                    <Route path="/home">
+                        <Home showError={updateErrorMessage} />
+                    </Route>
+
+                    <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
                 </div>
             </Router>
         </AuthContext.Provider>

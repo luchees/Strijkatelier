@@ -24,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api")
 @Api(value = "item-management", description = "Item Management API", tags = "item-management")
@@ -57,8 +58,8 @@ public class ItemController {
     @GetMapping(value = "/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Item> findItemById(@PathVariable long itemId) {
         try {
-            Item book = itemService.findById(itemId);
-            return ResponseEntity.ok(book);
+            Item item = itemService.findById(itemId);
+            return ResponseEntity.ok(item);
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // return 404, with null body
         }
@@ -116,6 +117,7 @@ public class ItemController {
     public ResponseEntity<ItemDto> updateItem(@Valid @RequestBody ItemDto item,
                                            @PathVariable long itemId) {
         try {
+            System.out.println(itemId+"" + item.getItemName());
             item.setId(itemId);
             itemService.update(item);
             return ResponseEntity.ok().build();

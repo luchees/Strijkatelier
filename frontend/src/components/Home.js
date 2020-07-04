@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Admin from "./Admin";
 import {Link, Route} from "react-router-dom";
 import ChangePassword from "./ChangePassword";
+import ItemTableComponent from "./item/ItemTableComponent";
+import Box from "@material-ui/core/Box";
+import Items from "./Items";
 function Home(props) {
     return(
-        <div className="mt-2">
+        <div >
             Home page content
             <ul>
                 <li>
@@ -19,8 +22,12 @@ function Home(props) {
                 <Route exact path="/" component={Home} />
                 <Route path="/admin" component={Admin} />
                 <Route path="/account/change-password" component={ChangePassword} />
+
             </ul>
+            <Items showError={props.showError} />
+
         </div>
+
     )
 }
 

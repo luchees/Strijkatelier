@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/baskets")
 @Api(value = "basket-management", description = "Basket Management API", tags = "basket-management")
@@ -192,6 +193,25 @@ public class BasketController {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (ResourceNotFoundException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @ApiOperation(value = "calculates price of the basket", nickname = "calculatePriceBasket", notes = "calculates the price of a basket and saves to the database ")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "{basket}"),
+            @ApiResponse(code = 404, message = "basket doesnt exists {basketId}"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @GetMapping(value = "/{basketId}/calculatePrice")
+    public ResponseEntity<BasketDto> calculatePriceOfBasket(@PathVariable long basketId)
+            throws URISyntaxException {
+        try {
+            BasketDto basketDto = basketService.findById(basketId);
+
+            return ResponseEntity.ok().body(  basketService.calculatePrice(basketDto));
+        }  catch (ResourceNotFoundException e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

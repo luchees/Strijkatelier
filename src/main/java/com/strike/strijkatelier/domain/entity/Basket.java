@@ -7,7 +7,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
 @Table(name = "basket")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class Basket implements Serializable {
+public class Basket {
     public Basket(){};
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,19 +24,23 @@ public class Basket implements Serializable {
     @JoinColumn (name="customer_id")
     private Customer customer;
 
-    public boolean active;
+    private boolean active;
     @Basic
-    public LocalDateTime startDateTime;
+    private LocalDateTime startDateTime;
     @Basic
-    public LocalDateTime doneDateTime;
+    private LocalDateTime doneDateTime;
     @ManyToMany(mappedBy="baskets")
-    public List<Item> items;
+    private List<Item> items;
+
+    @OneToMany(mappedBy = "basket")
+    private List<ServiceCheck> serviceChecks;
 
     public double price;
     @NotNull
     public boolean cash;
 
-    public Basket(List<Item> items, boolean cash){
+    public Basket(List<Item> items, List<ServiceCheck> serviceChecks, boolean cash){
+        this.serviceChecks = serviceChecks;
         active=true;
         startDateTime=LocalDateTime.now();
         this.items=items;
@@ -108,4 +111,11 @@ public class Basket implements Serializable {
         this.cash = cash;
     }
 
+    public List<ServiceCheck> getServiceChecks() {
+        return serviceChecks;
+    }
+
+    public void setServiceChecks(List<ServiceCheck> serviceChecks) {
+        this.serviceChecks = serviceChecks;
+    }
 }

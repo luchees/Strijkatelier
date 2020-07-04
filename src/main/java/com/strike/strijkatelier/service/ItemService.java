@@ -69,8 +69,8 @@ public class ItemService {
             if (!existsById(itemDto.getId())) {
                 throw new ResourceNotFoundException("Cannot find Item with id: " + itemDto.getId());
             }
-            Item item = itemRepository.save(mapper.mapToItem(itemDto));
-            itemRepository.save(item);
+            findById(itemDto.getId());
+            itemRepository.save(mapper.mapToItem(itemDto));
         } else {
             BadResourceException exc = new BadResourceException("Failed to save item");
             exc.addErrorMessage("Item is null or empty");
