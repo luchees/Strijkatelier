@@ -45,11 +45,15 @@ public class ItemService {
     }
 
 
-    public Item save(ItemDto itemDto) throws BadResourceException, ResourceAlreadyExistsException {
+    public ItemDto save(ItemDto itemDto) throws BadResourceException, ResourceAlreadyExistsException {
         if (!StringUtils.isEmpty(itemDto.getItemName())) {
             try {
-                Item item = itemRepository.save(mapper.mapToItem(itemDto));
-                return itemRepository.save(item);
+                Item item = new Item();
+                item.setMinutes(itemDto.getMinutes());
+                item.setPrice(itemDto.getPrice());
+                item.setItemName(itemDto.getItemName());
+
+                return mapper.maptoItemDto(itemRepository.save(item));
             }
             catch (Exception e)
             {

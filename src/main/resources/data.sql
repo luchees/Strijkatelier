@@ -1,11 +1,11 @@
 /*
 Item init
 */
-INSERT INTO item (id, item_name, minutes, price) VALUES (1, 'Hemd', 12, 6);
-INSERT INTO item (id, item_name, minutes, price) VALUES (2, 'T-shirt', 8, 3);
-INSERT INTO item (id, item_name, minutes, price) VALUES (3, 'Broek', 10, 3);
-INSERT INTO item (id, item_name, minutes, price) VALUES (4, 'Zakdoek', 5, 2);
-INSERT INTO item (id, item_name, minutes, price) VALUES (5, 'Hemd', 20, 10);
+INSERT INTO item (id, item_name, minutes, price) VALUES (10, 'Hemd', 12, 6);
+INSERT INTO item (id, item_name, minutes, price) VALUES (20, 'T-shirt', 8, 3);
+INSERT INTO item (id, item_name, minutes, price) VALUES (30, 'Broek', 10, 3);
+INSERT INTO item (id, item_name, minutes, price) VALUES (40, 'Zakdoek', 5, 2);
+INSERT INTO item (id, item_name, minutes, price) VALUES (50, 'Hemd', 20, 10);
 
 /*
 Roles init
@@ -30,6 +30,6 @@ INSERT INTO public.basket (id, active, cash, done_date_time, price, start_date_t
 /*
 Add items to bucket
  */
-INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (1, 1);
-INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (2, 1);
-INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (3, 1);
+INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (10, 1);
+INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (20, 1);
+INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (30, 1);

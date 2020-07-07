@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -85,7 +84,7 @@ public class ItemController {
 
     }
 
-    @ApiOperation(value = "add item", nickname = "getItemByName", notes = "add item to database")
+    @ApiOperation(value = "add item", nickname = "addItem", notes = "add item to database")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "{item}"),
             @ApiResponse(code = 409, message = "Resource Already exists"),
@@ -96,8 +95,8 @@ public class ItemController {
     public ResponseEntity<ItemDto> addItem(@Valid @RequestBody ItemDto item)
             throws URISyntaxException {
         try {
-            Item newItem = itemService.save(item);
-            return ResponseEntity.created(new URI("/api/items/" + newItem.getId())).body(item);
+            ItemDto newItem = itemService.save(item);
+            return ResponseEntity.ok(newItem);
         } catch (ResourceAlreadyExistsException ex) {
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
