@@ -4,7 +4,6 @@ import com.strike.strijkatelier.domain.entity.Basket;
 import com.strike.strijkatelier.domain.entity.Customer;
 import com.strike.strijkatelier.domain.model.CustomerDto;
 import com.strike.strijkatelier.exception.BadResourceException;
-import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
 import com.strike.strijkatelier.mapper.CustomerDtoMapper;
 import com.strike.strijkatelier.repository.CustomerRepository;
@@ -35,6 +34,7 @@ public class CustomerService {
             throw new ResourceNotFoundException("Cannot find Customer with id: " + id);
         } else return mapper.mapToCustomerDto(customer);
     }
+
     public Customer findCustomerById(Long id) throws ResourceNotFoundException {
         Customer customer = customerRepository.findById(id).orElse(null);
         if (customer == null) {
@@ -54,18 +54,21 @@ public class CustomerService {
         return customerDtos;
     }
 
-    public CustomerDto save(CustomerDto customer) throws BadResourceException, ResourceAlreadyExistsException {
-        if (!StringUtils.isEmpty(customer.getId())) {
-            if (customer.getId() != null && existsById(customer.getId())) {
-                throw new ResourceAlreadyExistsException("Customer with id: " + customer.getId() +
-                        " already exists");
-            } else {
-                return mapper.mapToCustomerDto(customerRepository.save(mapper.mapToCustomer(customer)));
-            }
+    public CustomerDto save(CustomerDto customerDto) throws BadResourceException {
+        try {
+            Customer customer = new Customer();
+            customer.setEmailAddress(customerDto.getEmailAddress());
+            customer.setId(customerDto.getId());
+            customer.setPhoneNumber(customerDto.getPhoneNumber());
+            customer.setFirstName(customerDto.getFirstName());
+            customer.setLastName(customerDto.getLastName());
+            customer.setMinutesLeft(customerDto.getMinutesLeft());
+            customer.setNote(customerDto.getNote());
+            customer.setBaskets(new ArrayList<>());
 
-        } else {
-            BadResourceException exc = new BadResourceException("Failed to save customer");
-            exc.addErrorMessage("Customer is null or empty");
+            return mapper.mapToCustomerDto(customerRepository.save(customer));
+        } catch (Exception e) {
+            BadResourceException exc = new BadResourceException("Failed to save item");
             throw exc;
         }
     }

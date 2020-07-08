@@ -1,14 +1,16 @@
-import React, {useState} from 'react';
-import Admin from "./Admin";
-import {Link, Route} from "react-router-dom";
-import ChangePassword from "./ChangePassword";
+import React from 'react';
 import MaterialItemTable from "./item/MaterialItemTable";
-function Home(props) {
-    return(
-        <div >
-            Home page content
-            <MaterialItemTable showError={props.showError}  />
+import CustomerMaterialTable from "./customer/CustomerMaterialTable";
+import BasketMaterialTable from "./basket/BasketMaterialTable";
 
+
+function Home(props) {
+    return (
+        <div>
+            Home page content
+            <MaterialItemTable showError={props.showError}/>
+            <CustomerMaterialTable showError={props.showError}/>
+            <BasketMaterialTable showError={props.showError}/>
         </div>
 
     )

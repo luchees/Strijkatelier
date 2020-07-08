@@ -3,7 +3,6 @@ package com.strike.strijkatelier.controller;
 import com.strike.strijkatelier.domain.entity.Item;
 import com.strike.strijkatelier.domain.model.ItemDto;
 import com.strike.strijkatelier.exception.BadResourceException;
-import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
 import com.strike.strijkatelier.exception.update.ErrorList;
 import com.strike.strijkatelier.service.ItemService;
@@ -25,7 +24,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/items")
 @Api(value = "item-management", description = "Item Management API", tags = "item-management")
 public class ItemController {
 
@@ -42,7 +41,7 @@ public class ItemController {
             @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @GetMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ItemDto>> getAllItems(
             @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
             return ResponseEntity.ok(itemService.findAll());
@@ -54,7 +53,7 @@ public class ItemController {
             @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @GetMapping(value = "/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Item> findItemById(@PathVariable long itemId) {
         try {
             Item item = itemService.findById(itemId);
@@ -71,7 +70,7 @@ public class ItemController {
             @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @GetMapping(value = "/item", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/name", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ItemDto>> getAllItemsByName(@RequestParam String itemName) {
         try{
             List<ItemDto> item = itemService.findByName(itemName);
@@ -91,15 +90,12 @@ public class ItemController {
             @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @PostMapping(value = "/items")
+    @PostMapping(value = "/")
     public ResponseEntity<ItemDto> addItem(@Valid @RequestBody ItemDto item)
             throws URISyntaxException {
         try {
             ItemDto newItem = itemService.save(item);
             return ResponseEntity.ok(newItem);
-        } catch (ResourceAlreadyExistsException ex) {
-            logger.error(ex.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } catch (BadResourceException ex) {
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -112,7 +108,7 @@ public class ItemController {
             @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @PutMapping(value = "/items/{itemId}")
+    @PutMapping(value = "/{itemId}")
     public ResponseEntity<ItemDto> updateItem(@Valid @RequestBody ItemDto item,
                                            @PathVariable long itemId) {
         try {
@@ -136,7 +132,7 @@ public class ItemController {
             @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @PatchMapping("/item/{itemId}/price")
+    @PatchMapping("/{itemId}/price")
     public ResponseEntity updatePrice(@Valid @RequestBody double price, @PathVariable long itemId) {
         try {
             itemService.updatePrice(itemId, price);
@@ -154,7 +150,7 @@ public class ItemController {
             @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @PatchMapping("/item/{itemId}/minutes")
+    @PatchMapping("/{itemId}/minutes")
     public ResponseEntity updateMinutes(@Valid @RequestBody int minutes, @PathVariable long itemId) {
         try {
             itemService.updateMinutes(itemId, minutes);
@@ -171,7 +167,7 @@ public class ItemController {
             @ApiResponse(code = 400, message = "Invalid request", response = ErrorList.class),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    @DeleteMapping(path = "/items/{itemId}")
+    @DeleteMapping(path = "/{itemId}")
     public ResponseEntity deleteItemById(@PathVariable long itemId) {
         try {
             itemService.deleteById(itemId);

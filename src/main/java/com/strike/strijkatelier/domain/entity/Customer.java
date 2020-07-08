@@ -23,7 +23,7 @@ public class Customer implements Serializable {
     private Long id;
 
     @Column(unique = true)
-    private String emailaddress;
+    private String emailAddress;
     @NotBlank
     private String firstName;
     @NotBlank
@@ -41,8 +41,8 @@ public class Customer implements Serializable {
     }
 
 
-    public Customer(String emailaddress, String firstName, String lastName, String phoneNumber) {
-        setEmailaddress(emailaddress);
+    public Customer(String emailAddress, String firstName, String lastName, String phoneNumber) {
+        setEmailAddress(emailAddress);
         setPhoneNumber(phoneNumber);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -66,12 +66,12 @@ public class Customer implements Serializable {
         this.id = id;
     }
 
-    public String getEmailaddress() {
-        return emailaddress;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setEmailaddress(String emailaddress) {
-        this.emailaddress = emailaddress;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getFirstName() {

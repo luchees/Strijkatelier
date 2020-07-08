@@ -18,18 +18,18 @@ INSERT INTO role (id, name) VALUES (2, 'ADMIN');
 Customers init
 */
 
-INSERT INTO customer (id, emailaddress, first_name, last_name, minutes_left, note, phone_number) VALUES (1, 'lucasvandenabbeele@hotmail.com', 'Lucas', 'Van den Abbeele', 12, 'First customer in the database', '0477449635');
+INSERT INTO customer (id, email_address, first_name, last_name, minutes_left, note, phone_number) VALUES (10, 'lucasvandenabbeele@hotmail.com', 'Lucas', 'Van den Abbeele', 12, 'First customer in the database', '0477449635');
 
 
 /*
 Basket init
 */
 
-INSERT INTO public.basket (id, active, cash, done_date_time, price, start_date_time, customer_id) VALUES (1, true, false, null, 0, '2020-07-02 12:13:20.000000', 1);
+INSERT INTO public.basket (id, active, cash, done_date_time, price, start_date_time, customer_id) VALUES (10, true, false, null, 0, '2020-07-02 12:13:20.000000', 10);
 
 /*
 Add items to bucket
  */
-INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (10, 1);
-INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (20, 1);
-INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (30, 1);
+INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (10, 10);
+INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (20, 10);
+INSERT INTO public.item_baskets (items_id, baskets_id) VALUES (30, 10);

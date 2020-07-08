@@ -20,12 +20,13 @@ public class CustomerDtoMapper {
 
     public Customer mapToCustomer(CustomerDto customerDto) {
         Customer customer = new Customer();
-        customer.setEmailaddress(customerDto.getEmailaddress());
+        customer.setEmailAddress(customerDto.getEmailAddress());
         customer.setId(customerDto.getId());
         customer.setPhoneNumber(customerDto.getPhoneNumber());
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         customer.setMinutesLeft(customerDto.getMinutesLeft());
+        customer.setNote(customerDto.getNote());
         customer.setBaskets(customerDto.getBasketDtos().stream()
                 .map(mapper::mapToBasket)
                 .collect(Collectors.toList()));
@@ -34,11 +35,12 @@ public class CustomerDtoMapper {
 
     public CustomerDto mapToCustomerDto(Customer customer) {
         CustomerDto customerDto = new CustomerDto();
-        customerDto.setEmailAddress(customer.getEmailaddress());
+        customerDto.setEmailAddress(customer.getEmailAddress());
         customerDto.setId(customer.getId());
         customerDto.setPhoneNumber(customer.getPhoneNumber());
         customerDto.setFirstName(customer.getFirstName());
         customerDto.setLastName(customer.getLastName());
+        customerDto.setNote(customer.getNote());
         customerDto.setBasketDtos(customer.getBaskets().stream()
                 .map(mapper::mapToBasketDto)
                 .collect(Collectors.toList()));

@@ -12,8 +12,8 @@ public class BasketDtoMapper {
 
     @Autowired
     ItemDtoMapper ItemDtomapper;
-    @Autowired
-    CustomerDtoMapper customerDtoMapper;
+//    @Autowired
+//    CustomerDtoMapper customerDtoMapper;
 
     public BasketDtoMapper() {
     }
@@ -27,7 +27,7 @@ public class BasketDtoMapper {
                         .map(ItemDtomapper::mapToItem)
                         .collect(Collectors.toList()));
         basket.setCash(basketDto.isCash());
-        basket.setCustomer(customerDtoMapper.mapToCustomer(basketDto.getCustomerDto()));
+       // basket.setCustomer(customerDtoMapper.mapToCustomer(basketDto.getCustomerDto()));
         basket.setStartDateTime(basketDto.getStartDateTime());
         basket.setPrice(basketDto.getPrice());
         basket.setDoneDateTime(basketDto.getDoneDateTime());
@@ -42,7 +42,7 @@ public class BasketDtoMapper {
                 .map(ItemDtomapper::maptoItemDto)
                 .collect(Collectors.toList()));
         basketDto.setCash(basket.isCash());
-        basketDto.setCustomerDto(customerDtoMapper.mapToCustomerDto(basket.getCustomer()));
+        //basketDto.setCustomerDto(customerDtoMapper.mapToCustomerDto(basket.getCustomer()));
         basketDto.setStartDateTime(basket.getStartDateTime());
         basketDto.setPrice(basket.getPrice());
         basketDto.setDoneDateTime(basket.getDoneDateTime());

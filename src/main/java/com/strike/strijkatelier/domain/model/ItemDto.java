@@ -1,5 +1,6 @@
 package com.strike.strijkatelier.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,7 +24,7 @@ public class ItemDto {
 
     @DecimalMin("0")
     private int minutes;
-
+    @JsonIgnoreProperties("itemDtos")
     private List<BasketDto> basketDtos;
 
     public ItemDto() {

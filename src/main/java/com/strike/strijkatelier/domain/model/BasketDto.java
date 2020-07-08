@@ -1,6 +1,7 @@
 package com.strike.strijkatelier.domain.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,6 +26,7 @@ public class BasketDto {
     @Id
     private Long id;
     @NotEmpty
+    @JsonIgnoreProperties("basketDtos")
     private CustomerDto customerDto;
 
     @ApiModelProperty(position = 1, required = false, dataType = "number", example = "3", notes = "Id of the Basket")

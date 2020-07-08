@@ -4,7 +4,6 @@ import com.strike.strijkatelier.domain.entity.Basket;
 import com.strike.strijkatelier.domain.entity.Customer;
 import com.strike.strijkatelier.domain.model.CustomerDto;
 import com.strike.strijkatelier.exception.BadResourceException;
-import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
 import com.strike.strijkatelier.exception.update.ErrorList;
 import com.strike.strijkatelier.service.CustomerService;
@@ -21,13 +20,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/api/customer")
+@RequestMapping("/api/customers")
 @Api(value = "customer-management", description = "Customer Management API", tags = "customer-management")
 public class CustomerController {
 
@@ -40,13 +38,12 @@ public class CustomerController {
 
     @ApiOperation(value = "Get all customers", nickname = "getAllCustomers", notes = "Gets all customers from the database")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "User was successfully registered"),
-            @ApiResponse(code = 404, message = "No items found in the database", response = ErrorList.class),
+            @ApiResponse(code = 200, message = "{Customers}"),
+            @ApiResponse(code = 404, message = "No customers found in the database", response = ErrorList.class),
             @ApiResponse(code = 500, message = "Internal server error")
     })
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CustomerDto>> getAllCustomers(
-            @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
+    public ResponseEntity<List<CustomerDto>> getAllCustomers() {
         try {
             return ResponseEntity.ok(customerService.findAll());
         } catch (ResourceNotFoundException e) {
@@ -55,7 +52,7 @@ public class CustomerController {
     }
     @ApiOperation(value = "Get a customer", nickname = "getACustomer", notes = "Gets a customer from the database")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "User was successfully registered"),
+            @ApiResponse(code = 200, message = "{Customer}"),
             @ApiResponse(code = 400, message = "No Customer was found", response = ErrorList.class),
             @ApiResponse(code = 500, message = "Internal server error")
     })
@@ -80,12 +77,8 @@ public class CustomerController {
             throws URISyntaxException {
         try {
             CustomerDto newCustomerDto = customerService.save(customerDto);
-            return ResponseEntity.created(new URI("/api/customer/" + newCustomerDto.getId()))
-                    .body(newCustomerDto);
-        } catch (ResourceAlreadyExistsException ex) {
-            logger.error(ex.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } catch (BadResourceException ex) {
+            return ResponseEntity.ok(newCustomerDto);
+        }  catch (BadResourceException ex) {
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

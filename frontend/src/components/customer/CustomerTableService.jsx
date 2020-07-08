@@ -2,13 +2,14 @@ import React from 'react';
 import axios from 'axios';
 import {API_BASE_URL} from '../../constants/apiContants';
 
-export default class ItemTableService {
+export default class CustomerTableService {
 
-
-    getItems(showError, callback) {
-        axios.get(API_BASE_URL + 'items/')
+    url = API_BASE_URL + 'customers/';
+    getCustomers(showError, callback) {
+        axios.get(this.url)
             .then(function (response) {
                 if (response.status === 200) {
+                    console.log(response.data);
                     callback(response.data);
                 }
 
@@ -22,11 +23,12 @@ export default class ItemTableService {
             })
     }
 
-    updateItem(showError, newData, callback) {
-        axios.put(API_BASE_URL + 'items/' + newData.id,
+    updateCustomer(showError, newData, callback) {
+        axios.put(this.url + newData.id,
             newData)
             .then(function (response) {
                 if (response.status === 200) {
+                    console.log(response.data);
                     callback(response.data);
                 }
 
@@ -41,10 +43,11 @@ export default class ItemTableService {
     }
 
 
-    deleteItem(showError, data, callback) {
-        axios.delete(API_BASE_URL + 'items/' + data.id)
+    deleteCustomer(showError, data, callback) {
+        axios.delete(this.url + data.id)
             .then(function (response) {
                 if (response.status === 200) {
+                    console.log("deleted:" + response.data);
                     callback(response.data);
                 }
 
@@ -58,11 +61,12 @@ export default class ItemTableService {
             })
     }
 
-    addItem(showError, newData, callback) {
-        axios.post(API_BASE_URL + 'items/',
+    addCustomer(showError, newData, callback) {
+        axios.post(this.url,
             newData)
             .then(function (response) {
                 if (response.status === 200) {
+                    console.log(response.data);
                     callback(response.data);
                 }
 

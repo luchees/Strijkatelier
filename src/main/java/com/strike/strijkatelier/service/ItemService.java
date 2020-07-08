@@ -3,7 +3,6 @@ package com.strike.strijkatelier.service;
 import com.strike.strijkatelier.domain.entity.Item;
 import com.strike.strijkatelier.domain.model.ItemDto;
 import com.strike.strijkatelier.exception.BadResourceException;
-import com.strike.strijkatelier.exception.ResourceAlreadyExistsException;
 import com.strike.strijkatelier.exception.ResourceNotFoundException;
 import com.strike.strijkatelier.mapper.ItemDtoMapper;
 import com.strike.strijkatelier.repository.ItemRepository;
@@ -45,8 +44,7 @@ public class ItemService {
     }
 
 
-    public ItemDto save(ItemDto itemDto) throws BadResourceException, ResourceAlreadyExistsException {
-        if (!StringUtils.isEmpty(itemDto.getItemName())) {
+    public ItemDto save(ItemDto itemDto) throws BadResourceException {
             try {
                 Item item = new Item();
                 item.setMinutes(itemDto.getMinutes());
@@ -54,17 +52,10 @@ public class ItemService {
                 item.setItemName(itemDto.getItemName());
 
                 return mapper.maptoItemDto(itemRepository.save(item));
+            } catch (Exception e) {
+                BadResourceException exc = new BadResourceException("Failed to save item");
+                throw exc;
             }
-            catch (Exception e)
-            {
-                throw new ResourceAlreadyExistsException();
-            }
-
-        } else {
-            BadResourceException exc = new BadResourceException("Failed to save item");
-            exc.addErrorMessage("Item is null or empty");
-            throw exc;
-        }
     }
 
     public void update(ItemDto itemDto)

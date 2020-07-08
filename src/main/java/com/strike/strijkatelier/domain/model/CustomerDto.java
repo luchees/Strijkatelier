@@ -16,7 +16,7 @@ public class CustomerDto {
     private Long id;
     @NotEmpty
     @MatchesPattern("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
-    private String emailaddress;
+    private String emailAddress;
     @NotEmpty
     private String firstName;
     @NotEmpty
@@ -36,12 +36,12 @@ public class CustomerDto {
         this.id = id;
     }
     @ApiModelProperty(position = 2, required = true, dataType = "String", example = "3", notes = "Email of the customer")
-    public String getEmailaddress() {
-        return emailaddress;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setEmailAddress(String emailaddress) {
-     this.emailaddress=emailaddress;
+    public void setEmailAddress(String emailAddress) {
+     this.emailAddress=emailAddress;
     }
     @ApiModelProperty(position = 3, required = true, dataType = "String", example = "3", notes = "Firstname of the customer")
     public String getFirstName() {

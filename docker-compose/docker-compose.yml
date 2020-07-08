@@ -12,6 +12,17 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: strijkatelier
 
+  #react Application
+  react:
+    image: react:dev
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - 3001:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
   # External dependencies
   redis:
     image: redis:alpine

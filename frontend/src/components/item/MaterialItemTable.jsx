@@ -41,17 +41,16 @@ class MaterialItemTable extends Component {
         //validation
         console.log(newData);
         console.log(oldData);
-        this.state.itemTableService.updateItem(this.props.showError,newData);
+        this.state.itemTableService.updateItem(this.props.showError, newData);
         const dataUpdate = [...this.state.data];
         const index = oldData.tableData.id;
-        console.log(index);
         dataUpdate[index] = newData;
         this.setState({data: dataUpdate});
 
     }
 
     handleRowDelete(oldData) {
-        this.state.itemTableService.deleteItem(this.props.showError,oldData);
+        this.state.itemTableService.deleteItem(this.props.showError, oldData);
         const dataDelete = [...this.state.data];
         const index = oldData.tableData.id;
         dataDelete.splice(index, 1);
@@ -61,29 +60,22 @@ class MaterialItemTable extends Component {
 
 
     handelRowAdd(newData, resolve) {
-        this.state.itemTableService.addItem(this.props.showError,newData, (addItem) => {
-            console.log(addItem);
+        this.state.itemTableService.addItem(this.props.showError, newData, (addItem) => {
             let dataToAdd = [...this.state.data];
             dataToAdd.push(addItem);
-            this.setState({ data: dataToAdd});
+            this.setState({data: dataToAdd});
             resolve();
         });
 
     }
 
 
-
-
-
     componentDidMount() {
-        console.log("mounted");
-        this.state.itemTableService.getItems(this.props.showError,this.updateState);
+        this.state.itemTableService.getItems(this.props.showError, this.updateState);
     }
 
     updateState = (rowsItems) => {
-        console.log(rowsItems);
         this.setState({data: rowsItems});
-        // this.setState({columns :);
     }
 
     render() {
@@ -102,7 +94,6 @@ class MaterialItemTable extends Component {
                         }),
                     onRowUpdate: (newData, oldData) =>
                         new Promise((resolve, reject) => {
-                            console.log(newData)
                             this.handleRowUpdate(newData, oldData);
                             resolve();
                         }),
