@@ -1,45 +1,40 @@
 import React, {useState} from 'react';
 import './App.css';
-import LoginForm from './components/LoginForm';
-import RegistrationForm from './components/RegistrationForm';
-import Home from './components/Home';
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {BrowserRouter as Router} from "react-router-dom";
 import AlertComponent from './components/AlertComponent';
-import Navbar from "./components/Navbar";
-import Admin from "./components/Admin";
 import {AuthContext} from "./context/auth";
-import PrivateRoute from './components/PrivateRoute';
-import ChangePassword from "./components/ChangePassword";
+import RoutesComponent from "./components/routes/routes-component";
+import {DRAWER_WIDTH} from "./constants/apiContants";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Navbar from "./components/Drawer/Navbar";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+
+
+const useStyles = makeStyles({
+    container: {
+        paddingLeft: DRAWER_WIDTH,
+        flexShrink: 0,
+    },
+    mobile: {
+        paddingLeft: 0
+    }
+});
 
 function App() {
     const [title, updateTitle] = useState(null);
+    const matches = useMediaQuery('(min-width:600px)');
 
+    const classes = useStyles();
 
     const [errorMessage, updateErrorMessage] = useState(null);
+    const mobile = matches ? classes.container : classes.mobile;
     return (
-        <AuthContext.Provider value={true}>
-            <Router>
-                <div className="App">
-                        <Navbar title={title}
-                        />
-                        <Route path="/" exact={true}>
-                            <RegistrationForm showError={updateErrorMessage} updateTitle={updateTitle}/>
-                        </Route>
-                        <Route path="/register">
-                            <RegistrationForm showError={updateErrorMessage} updateTitle={updateTitle}/>
-                        </Route>
-                        <Route path="/login">
-                            <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
-                        </Route>
+        <AuthContext.Provider value= {true} >
+            < Router>
+                <div className= "App" >
+                    <Navbar title= {title} showError={updateErrorMessage}/>
+                    <div className={mobile}><RoutesComponent/></div>
 
-                        <PrivateRoute path="/admin" component={Admin}/>
-                        <PrivateRoute path="/account/change-password" component={ChangePassword}/>
-
-
-
-                    <Route path="/home">
-                        <Home showError={updateErrorMessage} updateTitle={updateTitle} />
-                    </Route>
 
                     <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
                 </div>
