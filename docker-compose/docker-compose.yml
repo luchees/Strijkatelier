@@ -12,24 +12,24 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: strijkatelier
 
-  #react Application
-  react:
-    image: react:dev
-    volumes:
-      - '.:/app'
-      - '/app/node_modules'
-    ports:
-      - "80:80"
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-  #Spring boot application
-  springboot:
-    image: strijkatelier:dev
-    volumes:
-      - '.:/app'
-      - '/app/node_modules'
-    ports:
-      - "8081:8081"
+#  #react Application
+#  react:
+#    image: react:dev
+#    volumes:
+#      - '.:/app'
+#      - '/app/node_modules'
+#    ports:
+#      - "80:80"
+#    environment:
+#      - CHOKIDAR_USEPOLLING=true
+#  #Spring boot application
+#  springboot:
+#    image: strijkatelier:dev
+#    volumes:
+#      - '.:/app'
+#      - '/app/node_modules'
+#    ports:
+#      - "8081:8081"
 
   # External dependencies
   redis:

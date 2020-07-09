@@ -23,6 +23,8 @@ public class CustomerDto {
     private String lastName;
     @NotEmpty
     private String phoneNumber;
+    @NotEmpty
+    private String accountNumber;
     private List<BasketDto> basketDtos;
     private double minutesLeft;
     private String note;
@@ -91,6 +93,14 @@ public class CustomerDto {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    @ApiModelProperty(position = 9, required = true, dataType = "String", example = "3", notes = "account Number of the customer")
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 }
 

@@ -30,6 +30,8 @@ public class Customer implements Serializable {
     private String lastName;
     @NotBlank
     private String phoneNumber;
+    @NotBlank
+    private String accountNumber;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     private List<Basket> baskets;
@@ -41,13 +43,21 @@ public class Customer implements Serializable {
     }
 
 
-    public Customer(String emailAddress, String firstName, String lastName, String phoneNumber) {
+    public Customer(String emailAddress, String firstName, String lastName, String phoneNumber, String accountNumber) {
+        this.accountNumber = accountNumber;
         setEmailAddress(emailAddress);
         setPhoneNumber(phoneNumber);
         this.firstName = firstName;
         this.lastName = lastName;
         baskets = new ArrayList<>();
         minutesLeft = 0.00;
+    }
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public void addBasket(Basket basket) {

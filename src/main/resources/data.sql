@@ -18,7 +18,7 @@ INSERT INTO role (id, name) VALUES (2, 'ADMIN');
 Customers init
 */
 
-INSERT INTO customer (id, email_address, first_name, last_name, minutes_left, note, phone_number) VALUES (10, 'lucasvandenabbeele@hotmail.com', 'Lucas', 'Van den Abbeele', 12, 'First customer in the database', '0477449635');
+INSERT INTO customer (id, email_address, first_name, last_name, minutes_left, note,account_number, phone_number) VALUES (10, 'lucasvandenabbeele@hotmail.com', 'Lucas', 'Van den Abbeele', 12, 'First customer in the database', 15485646531, '0477449635');
 
 
 /*

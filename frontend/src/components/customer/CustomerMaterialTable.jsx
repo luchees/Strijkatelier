@@ -15,6 +15,7 @@ class CustomerMaterialTable extends Component {
             {title: 'email address', field: 'emailAddress'},
             {title: 'first name', field: 'firstName'},
             {title: 'last name', field: 'lastName'},
+            {title: 'account number', field: 'accountNumber'},
             {title: 'minutes left', field: 'minutesLeft', type: 'numeric'},
             {title: 'phone number', field: 'phoneNumber'},
             {title: 'note', field: 'note'},
