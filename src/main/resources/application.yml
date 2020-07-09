@@ -21,7 +21,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
       format_sql: true
     properties:
       hibernate:
@@ -49,3 +49,10 @@ logging:
 
 support:
   email: USERNAME@gmail.com
+
+api:
+  security:
+    enabled: true
+    jwt:
+      secret: jwt_secret
+      validity: 180000

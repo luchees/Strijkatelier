@@ -10,6 +10,7 @@ import com.strike.strijkatelier.mapper.BasketDtoMapper;
 import com.strike.strijkatelier.mapper.ItemDtoMapper;
 import com.strike.strijkatelier.repository.BasketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -32,6 +33,7 @@ public class BasketService {
         return basketRepository.existsById(id);
     }
 
+    @Secured("ADMIN")
     public BasketDto findById(Long id) throws ResourceNotFoundException {
         Basket basket = basketRepository.findById(id).orElse(null);
         if (basket == null) {
@@ -39,6 +41,7 @@ public class BasketService {
         } else return mapper.mapToBasketDto(basket);
     }
 
+    @Secured("BASIC_USER")
     public List<BasketDto> findAll() {
         List<BasketDto> basketDtos = new ArrayList<>();
         List<Basket> baskets = basketRepository.findAll();
