@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   # PostGres
-  postgresStrijkatelier:
+  postgres:
     image: postgres
     ports:
       - "5432:5432"
@@ -19,9 +19,17 @@ services:
       - '.:/app'
       - '/app/node_modules'
     ports:
-      - 3001:3000
+      - "80:80"
     environment:
       - CHOKIDAR_USEPOLLING=true
+  #Spring boot application
+  springboot:
+    image: strijkatelier:dev
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - "8081:8081"
 
   # External dependencies
   redis:
@@ -38,7 +46,7 @@ services:
     logging:
       driver: json-file
     ports:
-      - "80:80"
+      - "81:80"
       - "443:443"
       - "25:25"
       - "465:465"
