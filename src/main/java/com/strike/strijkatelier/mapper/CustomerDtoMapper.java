@@ -26,6 +26,7 @@ public class CustomerDtoMapper {
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         customer.setMinutesLeft(customerDto.getMinutesLeft());
+       customer.setAccountNumber(customerDto.getAccountNumber());
         customer.setNote(customerDto.getNote());
         customer.setBaskets(customerDto.getBasketDtos().stream()
                 .map(mapper::mapToBasket)
@@ -41,6 +42,7 @@ public class CustomerDtoMapper {
         customerDto.setFirstName(customer.getFirstName());
         customerDto.setLastName(customer.getLastName());
         customerDto.setNote(customer.getNote());
+        customerDto.setAccountNumber(customer.getAccountNumber());
         customerDto.setBasketDtos(customer.getBaskets().stream()
                 .map(mapper::mapToBasketDto)
                 .collect(Collectors.toList()));
