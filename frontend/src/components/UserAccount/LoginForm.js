@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {API_BASE_URL} from '../constants/apiContants';
+import {API_BASE_URL} from '../../constants/apiContants';
 import {Redirect, withRouter} from "react-router-dom";
-import {useAuth} from "../context/auth";
+import {useAuth} from "../../context/auth";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 const style = {

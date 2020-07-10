@@ -9,6 +9,7 @@ export default class ItemTableService {
         axios.get(API_BASE_URL + 'items/')
             .then(function (response) {
                 if (response.status === 200) {
+                    console.log(response.data)
                     callback(response.data);
                 }
 
